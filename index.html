@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+
+   <head>
+   <meta charset="UTF-8">
+
+<style type='text/css'>
+.hit {fill : lightblue; }
+
+.hitText { font-weight : bold; }
+
+.miss {fill : lightgreen; }
+
+.missText { font-weight : normal; }
+
+.x.axis path,
+.x.axis line {
+  fill: none;
+  stroke: #000000;
+  stroke-width: 1.1;
+  shape-rendering: crispEdges;
+}
+
+.x.axis text {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.y.axis path,
+.y.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1.1; 
+  shape-rendering: crispEdges;
+}
+
+.y.axis text {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+#controls {text-align: left; 
+margin-left:325px;
+margin-top:20px;
+margin-bottom:-20px;
+font-size: 30px;
+}
+
+svg { display: inline; }
+
+#yAxis #xAxis {
+background-color: lightblue;
+}
+
+#controls {
+    position: absolute;
+    width: 950px;
+}
+
+#timelineContainer {
+    position: absolute;
+    width: 800px;
+    height: 100px;
+    left: 300px;
+}
+
+#yearChartContainer {
+    position: absolute;
+    width: 800px;
+    height: 150px;    
+    left: 150px;
+}
+
+#chartContainer {
+    position: absolute;
+    width: 800px;
+    height: 150px;    
+    left: 150px;
+    top: 300px;
+}
+
+
+
+#timeline {
+    position: absolute;
+    width: 0px;
+    height: 20px;
+    border: none;
+/*    border-radius: 15px; */
+    background-color: lightgreen;
+}
+
+#yearChart {
+    position: absolute;
+    top: 200px;
+    height: 150px;
+    width: 800px;
+    left: 150px;    
+}
+
+#svg {
+    position: absolute;
+    width: 800px;
+    height: 600px;  
+    left: 150px;
+    top: 300px;
+    background-color: white;
+    
+    background-image: url(bg.png);
+    background-position: left top;
+    background-size: 800px 560px;
+    background-repeat: no-repeat;    
+}
+
+#ageChart {
+    position: absolute;
+    height: 600px;
+    width:150px;  
+    left: 0px;
+    top: 300px;
+    background-color: white;
+
+}
+
+#increase {
+    color: green;
+}
+
+#decrease {
+    color: red;
+}
+
+.xAxis path,
+.xAxis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+
+.xAxis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+
+</style>
+
+
+<script src='Tangle-0.1.0/Tangle.js' type='text/javascript'></script>
+<link rel="stylesheet" href='Tangle-0.1.0/TangleKit/TangleKit.css' type='text/css'></style>
+<script src='Tangle-0.1.0/TangleKit/mootools.js' type='text/javascript'></script>
+<script src='Tangle-0.1.0/TangleKit/sprintf.js' type='text/javascript'></script>
+<script src='Tangle-0.1.0/TangleKit/BVTouchable.js' type='text/javascript'></script>
+<script src='Tangle-0.1.0/TangleKit/TangleKit.js' type='text/javascript'></script>
+<script src='d3/d3.min.js'></script>
+<script src='crossfilter.min.js'></script>
+<script src='dc.js-2.0.0-beta.19/dc.min.js'></script>
+
+
+<script type='text/javascript'>
+
+var cumsum = function(arr) { return (arr.map(function(n,i) { return arr.slice(0,i+1).reduce(function(x,y) { return x + y; }); })); }
+
+var roundn = function(n) {
+    return function(m) {
+        return(Math.round(m/n)*n);
+    }
+}
+
+var round5 = roundn(5);
+
+
+                d3.json("data/data.json", function(error, json) {
+                    if (error) return console.warn(error);
+                    //console.log(json);
+                    json.forEach(function(d) {
+                        d.age = +d.age;
+                    })
+
+
+function setUpTangle() { 
+var rootElement = document.getElementById('controls');
+var model = {
+initialize: function() {
+
+                  this.start = 2015;
+                  this.end = 2040;
+                  this.firstYear = 2015;
+                  this.lastYear = 2040;
+                  this.nYears = this.end - this.start + 1;
+                  this.minAge = 0;
+                  this.maxAge = 100;                  
+                  this.peoplePerHouse = 15;  // visas ggr 100
+
+                    this.data = json;
+                    //this.startData = this.data.slice(0,102);
+                    this.changeData = this.data.slice(101, this.data.length);
+                    this.xf = crossfilter(this.changeData);
+                    this.yearDimension = this.xf.dimension(function(d) { return d.year; });
+                    this.ageDimension = this.xf.dimension(function(d) { return d.age; });
+                    this.popDimension = this.xf.dimension(function(d) { return d.s; });
+                    
+                    //this.startxf = crossfilter(this.startData);
+                    //this.startYearPop = this.startxf.dimension(function(d) { return d.age; });
+                    
+                    this.changeByYear = [];
+                    this.yearData = [];
+
+                 this.maxHouses = 150;                 
+                 this.nHouses = 0;
+                 //init(this.start, this.end, this.nYears, 150000, this.peoplePerHouse * 100, this.nHouses, this.maxHouses);
+
+
+
+/*
+//d3.select('#timelineContainer')
+d3.select('#yearChartContainer')
+    //.append('div').attr('id', 'yearChartContainer')
+    .append('svg').attr('id', 'yearChart');
+    */
+// append bar chart
+
+                  this.yearFilter = [this.start, this.end + 1];
+                  this.changeByYear = this.yearDimension.filterRange(this.yearFilter)
+                                        .group().reduceSum(function(d) { return d.s; });
+                  this.ageFilter = [this.minAge, this.maxAge + 1];
+                  this.changeByAge = this.ageDimension.filterRange(this.ageFilter).group()
+                                          .reduceSum(function(d) { return d.s; });                  
+//-----//
+
+this.width = 800;
+this.height = 100;
+this.barSize = 75;
+
+var that = this;
+
+// YEAR CHART
+
+var yearScale = d3.scale.ordinal()
+                .domain(this.changeByYear.all().map(function(d) { return d.key; }))
+                .rangeRoundBands([0,800], 0.05);                
+var yScaleYear = d3.scale.linear()
+                .domain([0,2500])
+                .range([0,this.barSize]);
+
+this.yearSvg = d3.select('#yearChart');
+
+this.yearBars = this.yearSvg
+                .selectAll('rect')           
+                .data(this.changeByYear.all(), function(d) { return d.key; });
+
+console.log('min, max => ' + d3.min(that.changeByYear.all(), function(d) { return d.value; }) + ', ' +
+                             d3.max(that.changeByYear.all(), function(d) { return d.value; }));
+
+
+                this.yearBars
+                    .enter()
+                    .append('rect')
+                    .attr({ width: this.width / 26,
+                        height: function(d) { return yScaleYear(d.value); },
+                        x: function(d) { return yearScale(d.key); },
+                        y: function(d) { return 75 - yScaleYear(d.value); },   //-----//
+                        year: function(d) { return d.key; },
+                        value: function(d) { return d.value; }                   
+                    })
+                    .style('fill', 'grey');
+
+        this.xAxisYear = d3.svg.axis()
+                    .scale(yearScale)
+                    .orient('bottom')
+                    .tickValues([2015,2020,2025,2030,2035,2040]);
+        this.yearSvg.append('g')
+                    .attr('class', 'xAxis')
+                    .attr('transform', 'translate(0,' + (this.barSize + 5) + ')')
+                    .call(this.xAxisYear);
+                    
+this.yearSvg.append('text')
+            .text("År")
+            .style('font-size', 18)
+            .attr({ x: 0, y: 20 });    
+
+//-----//
+
+// AGE CHART
+
+
+
+var ageScale = d3.scale.ordinal()
+                .domain(this.changeByAge.all().map(function(d) { return d.key; }))
+                .rangeRoundBands([600,0], 0.15);                
+var yScaleAge = d3.scale.linear()
+                .domain([0,2500])
+                .range([0,this.barSize]);
+
+this.ageSvg = d3.select('#ageChart');
+
+this.ageBars = this.ageSvg
+                .selectAll('rect')           
+                .data(this.changeByAge.all(), function(d) { return d.key; });
+
+console.log('min, max => ' + d3.min(that.changeByAge.all(), function(d) { return d.value; }) + ', ' +
+                             d3.max(that.changeByAge.all(), function(d) { return d.value; }));
+
+
+                this.ageBars
+                    .enter()
+                    .append('rect')
+                    .attr({ height: ageScale.rangeBand(),
+                        width: function(d) { return yScaleAge(d.value) >= 0 ? yScaleAge(d.value) : 0; },
+                        y: function(d) { return ageScale(d.key); },
+                        x: function(d) { return 75 - yScaleYear(d.value); },   //-----//
+                        age: function(d) { return d.key; },
+                        value: function(d) { return d.value; }                   
+                    })
+                    .style('fill', 'blue');
+
+        this.xAxisAge = d3.svg.axis()
+                    .scale(ageScale)
+                    .orient('right')
+                    .tickValues([0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]);
+        this.ageSvg.append('g')
+                    .attr('class', 'xAxis')
+                    .attr('transform', 'translate(' + (this.barSize + 5) + ',0)')
+                    .call(this.xAxisAge);
+
+this.ageSvg.append('text')
+            .text("Ålder")
+            .style('font-size', 18)
+            .attr({ x: 10, y: 20 });                    
+
+//-----//
+
+
+
+
+
+
+
+
+                 
+                 
+            },
+update: function() {
+
+                  /*
+                  this.start = this.end - this.start >= 1 ? this.start : this.end - 1;
+                  this.end = this.end - this.start >= 1 ? this.end : this.start + 1; 
+                  */
+
+                  this.start = this.end - this.start >= 0 ? this.start : this.end;
+                  this.end = this.end - this.start >= 0 ? this.end : this.start;
+
+                  /*
+                  this.minAge = this.maxAge - this.minAge >= 1 ? this.minAge : this.maxAge - 1;
+                  this.maxAge = this.maxAge - this.minAge >= 1 ? this.maxAge : this.minAge + 1;
+                  */
+
+                  this.minAge = this.maxAge - this.minAge >= 0 ? this.minAge : this.maxAge;
+                  this.maxAge = this.maxAge - this.minAge >= 0 ? this.maxAge : this.minAge;
+
+                  this.nYears = this.end - this.start + 1;
+                  console.log('tangle was updated...');
+                  
+                  this.yearFilter = [this.start, this.end + 1];
+                  //this.ageFilter = [16,19];
+                  //this.minAge = this.ageFilter[0];
+                  //this.maxAge = this.ageFilter[1];
+                  this.ageFilter = [this.minAge, this.maxAge + 1];
+                  
+                  //---//
+                  
+
+                                   
+                  //---//
+                  
+                  this.changeByYear = this.yearDimension.filterRange(this.yearFilter)
+                                        .group().reduceSum(function(d) { return d.s; });
+                    // förändringsdata börjar vid 2015
+                  
+                  
+                  this.changeByAge = this.ageDimension.filterRange(this.ageFilter).group()
+                                          .reduceSum(function(d) { return d.s; });
+
+
+                  //console.log(this.yearDimension.top(5)[0]);
+                  
+                console.table(this.changeByAge.all());
+                //console.table(this.changeByYear.all());
+                //console.log("total befolkningstillväxt >> " + this.yearDimension.groupAll()
+                //            .reduceSum(function(d) { return d.s; }).value());
+                
+                           
+                    //this.popByYear = this.changeByYear.all();
+                    //this.startYearPop = this.popByYear[this.start - this.firstYear];         
+                    //this.endYearPop = cumsum2(this.popByYear.slice(this.start - this.firstYear, this.end - this.firstYear + 1), "s");
+
+                  this.change = round5(this.xf.groupAll()
+                                            .reduceSum(function(d) { return d.s; })
+                                            .value());
+
+                    console.log('total folkökning: ' + this.change);
+
+                  this.increase = this.change >= 0;
+                  this.decrease = !this.increase;
+                                              
+                  //this.from = this.startYearPop.value;  //------//
+                  //this.to = this.from + this.change;
+
+                //this.maxHouses = Math.ceil(40000 / (this.peoplePerHouse * 100));  // 1000 pers per hus 
+                //this.maxHouses = 75;
+                this.nHouses = Math.ceil(this.change / (this.peoplePerHouse * 100));  // 1000 pers per hus
+
+this.houseData = range(this.nHouses);
+console.log('this.houseData => ' + this.houseData); 
+
+                update(this.start, this.end, this.nYears, this.change, this.peoplePerHouse * 100, this.nHouses, this.maxHouses, this.houseData);
+
+//-----//
+
+    // ÅLDERSGRUPPER
+                  this.n0 = this.changeByAge.all().slice(0,1)
+                    .map(function(d) { return d.value; });
+                  console.log('this.n0 => ' + this.n0);
+
+                  this.n1_5 = this.changeByAge.all().slice(1,6)
+                    .map(function(d) { return d.value; });
+                  console.log('this.n1_5 => ' + this.n1_5);
+                    
+                  this.n6_15 = this.changeByAge.all().slice(6,16)
+                    .map(function(d) { return d.value; });
+                  console.log('this.n6_15 => ' + this.n6_15);
+                  
+                  this.n16_19 = this.changeByAge.all().slice(16,20)
+                    .map(function(d) { return d.value; });
+                  console.log('this.n16_19 => ' + this.n16_19);                  
+                  
+                  this.n20_64 = this.changeByAge.all().slice(20,65)
+                    .map(function(d) { return d.value; });
+                  console.log('this.n20_64 => ' + this.n20_64);
+                  
+                  this.n65_100 = this.changeByAge.all().slice(65,101)
+                    .map(function(d) { return d.value; });
+                  console.log('this.n65_100 => ' + this.n65_100);                                               
+
+
+                this.allAges = [this.n0, this.n1_5, this.n6_15, this.n16_19, this.n20_64, this.n65_100].concat();
+                this.sumOfAllAges = this.allAges
+                                        .reduce(function(a,b) { return a.concat(b) })
+                                        .reduce(function(a,b) { return a + b; });
+                console.log('sum of all ages => ' + this.sumOfAllAges);
+
+//-----//
+
+
+/*
+this.timelineWidth = d3.select('#yearChartContainer').style('width');
+this.timelineScale = d3.scale.linear()
+                    .domain([0, 26])
+                    .range([0, this.timelineWidth]);
+
+
+d3.select('#timeline')
+    //.transition()
+    //.duration(500)
+    .style({ 'width': this.timelineScale(this.nYears),
+             'left': this.timelineScale(this.start - 2015)
+            });
+
+console.log("update... timelineWidth = " + this.timelineScale(this.nYears));
+console.log("start,end,change => " + this.start + " " + this.end + " " + this.nYears);
+*/
+
+//------//
+
+
+
+this.width = 800;
+this.barSize = 75;
+
+var that = this;
+
+var yDomainYear = [0, d3.max(that.changeByYear.all(), function(d) { return d.value; })];
+                  //d3.min(that.changeByYear.all(), function(d) { return d.value; }),
+
+console.log('min, max => ' + yDomainYear); 
+
+var yearScale = d3.scale.ordinal()
+                .domain(this.changeByYear.all().map(function(d) { return d.key; }))
+                .rangeRoundBands([0,800], 0.05);                      
+var yScaleYear = d3.scale.linear()
+                .domain([0,7000])
+                //.domain(yDomainYear)
+                .range([0,this.barSize]);
+                
+
+                
+                this.yearBars
+                    .attr({ width: yearScale.rangeBand(),
+                        height: function(d) { return yScaleYear(d.value) >= 0 ? yScaleYear(d.value) : 0; },
+                        x: function(d) { return yearScale(d.key); },
+                        y: function(d) { return 75 - yScaleYear(d.value); },   //-----//
+                        year: function(d) { return d.key; },
+                        value: function(d) { return d.value; }                   
+                    })
+                    .style('fill', function(d) {
+                        console.log('this.start, this.end => ' + that.start + ', ' + that.end);                  
+                        return ((d.key >= that.start) && (d.key <= that.end)) ? '#00b5e2' : '#b5b5b5';                    
+                    });                    
+                    
+                    //.style('fill', 'blue');
+                
+                this.yearBars.exit().remove();
+                
+
+
+
+//-----//
+
+
+var ageScale = d3.scale.ordinal()
+                .domain(this.changeByAge.all().map(function(d) { return d.key; }))
+                .rangeRoundBands([600,0], 0.15);                
+var yScaleAge = d3.scale.linear()
+                .domain([0,2500])
+                .range([0,this.barSize]);
+
+
+                this.ageBars
+                    .attr({ height: ageScale.rangeBand(),
+                        width: function(d) { return yScaleAge(d.value) >= 0 ? yScaleAge(d.value) : 0; },
+                        y: function(d) { return ageScale(d.key); },
+                        x: function(d) { return 75 - yScaleAge(d.value); },   //-----//
+                        age: function(d) { return d.key; },
+                        value: function(d) { return d.value; }                   
+                    })
+                    .style('fill', function(d) {
+                        console.log('this.minAge, this.maxAge => ' + that.minAge + ', ' + that.maxAge);                  
+                        return ((d.key >= that.minAge) && (d.key <= that.maxAge)) ? '#00b5e2' : '#b5b5b5';                    
+                    });  
+                    
+                this.ageBars.exit().remove();
+
+
+
+//-----//
+
+
+
+        }
+    }
+    tangle = new Tangle(rootElement, model);
+    
+}
+
+setUpTangle();
+
+                    return json;
+                })   // end of d3.json
+
+
+//-------//
+
+
+var range = function(n) { return Array.apply(null, Array(n)).map(function (_, i) {return i+1;}); };
+console.log('range 1-5 => ' + range(5));
+
+
+
+</script>
+
+
+   </head>
+  <!-- <body onload="setUpTangle()"> -->
+  <body>
+
+   <div id='controls'>
+   
+         <h1 style="display:inline; margin-left:50px; font-family: MyriadPro-Bold, Garamond, Arial, Helvetica, sans-serif">Nya malmöbor 2015-2040</h1>
+      <br>
+          Under  
+           <span data-var="start" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
+            till och med 
+           <span data-var="end" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
+            (en  
+           <span data-var="nYears"></span>-årsperiod)
+           väntas 
+           <span id='group'>invånarantalet</span>
+         <span id='increase' class='TKIf' data-var='increase'>öka</span> 
+         <span id='decrease' class='TKIf' data-var='decrease'>minska</span> 
+         med 
+         <span data-var='change'></span> individer i åldrarna 
+         <span data-var='minAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span> till 
+         <span data-var='maxAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span>. 
+         Med 
+         <span data-var='peoplePerHouse' class="TKAdjustableNumber" data-min="10" data-max="30"></span>00
+         personer boende i varje hus behöver vi producera 
+         <span data-var="nHouses"></span> nya bostadshus. 
+         <div id="result">
+
+        
+
+                <!--<div id="yearChartContainer">-->
+                    <!-- <span id="timeline"></span> -->
+                    <svg id="ageChart"></svg>
+                    
+                    <svg id="yearChart"></svg>
+                <!--</div>-->
+                
+
+                
+            <br><br>
+            <!--
+                </div>
+                  <div id='0'>0-åringar</span>
+                  <div id='1-5'>1-5åringar</span>
+                  <div id='6-15'>6-15åringar</span>
+                  <div id='16-19'>16-19åringar</span>
+                  <div id='20-44'>20-44åringar</span>
+                  <div id='45-64'>46-64åringar</span>    
+                  <div id='45-64'>65-79åringar</span>                      
+                  <div id='80-w'>+80-åringar <span data-var="start"></span> - <span data-var="end"></span> 
+                    ... </span>                              
+         </div>
+         -->
+                <!--<div id="chartContainer" style="background-color: lightblue;">-->
+                    <svg id="svg"></svg>
+                <!--</div>-->
+      </div> <!-- tangle end -->
+</div>
+
+   <div id='content'>
+  <span id='yAxis'></span>
+  <span id='mTable'></span>
+  <div id='xAxis'></div>
+   
+   </div>
+
+
+
+<script type='text/javascript'>
+
+var outerWidth = 500,
+    outerHeight = 400,
+    margin = {top: 30, right: 30, bottom: 50, left: 50},
+    width = outerWidth - margin.left - margin.right,
+    height = outerHeight - margin.top - margin.bottom;
+
+
+/*
+var init = function(start, end, nYears, change, peoplePerHouse, nHouses, maxHouses){
+
+console.log("init...");
+
+}
+*/
+
+
+
+
+
+
+var update = function(start, end, nYears, change, peoplePerHouse, nHouses, maxHouses, houseData){
+
+
+
+var svgHeight = 500;
+
+
+
+var areaPoints = [[100,50], [100,150], [80,150], [150,200],
+                  [220,150], [200,150], [200,50], [100,50]];
+
+var transitionTime = 30;
+//maxHouses = 40;
+//peoplePerHouse = 1000;
+//var nHouses = Math.floor(change / peoplePerHouse);  // 1000 pers per hus 
+console.log('antal hus => ' + nHouses);
+
+var houseScaleX = d3.scale.linear().domain([1,maxHouses]).range([0,500]);  //---//
+//console.log('--> ' + houseScaleX(nHouses));
+
+
+//d3.select('#svg').selectAll('polygon').remove();
+
+var house = d3.select('#svg').selectAll('polygon')
+                            .data(houseData, function(d,i) { return d; });
+                            
+                        house
+                            .enter()
+                            .append("polygon")
+                            .attr("points", areaPoints.map(function(d) { 
+                                    var x = d[0],
+                                    y = svgHeight - d[1] + 100;
+                                    return [x,y]; }))                                    
+                            .attr("stroke", "black")
+                            .attr("stroke-width", 1)
+                            .attr("fill", "#00b5e2")
+                            .attr("transform", function(d,i) { return "translate(" + (houseScaleX(d)) + ")"; })
+                            .attr('n', function(d,i) { return i; })
+                            .style('fill', 'Bisque'); 
+                        house.exit()
+                            .transition().duration(transitionTime * 5)
+                            .style('fill', 'orange')
+                            .style('fill-opacity', 0)
+                            .style('stroke-opacity', 0)
+                            .remove();
+                        
+
+
+
+                        
+
+   }
+
+
+
+
+</script>
+
+</body>
+</html>
+ 
