@@ -22,7 +22,7 @@ var range = function(from,to,step) {
             var round5 = roundn(5);
             round5(13) === 15;
         same as:
-            roundn(5)(13)
+            roundn(5)(13);
 */
 var roundn = function(n) {
     return function(m) {
@@ -33,53 +33,34 @@ var roundn = function(n) {
 
 
 /*
-    If given an svg selection and an object of settings, appends a bar chart and returns it
+    Cumulative sum of an array. 
+        Example:
+            cumsum([1,2,3]) === [1,3,6];
+*/
+var cumsum = function(arr) { return (arr.map(function(n,i) { return arr.slice(0,i+1).reduce(function(x,y) { return x + y; }); })); }
+
+
+
+/*
+    If given an svg selection and two objects of settings, appends a bar chart and returns it
 */
 function horizontalBarChart(el, static, dynamic) {
 
 var instance = {};
-
-var dummyData = range(2015,2040)
-                    .map(function(d,i) { return 1500 + Math.round(Math.random() * 1000); })
-                    .map(function(d,i) { return { key: i + 2015, value: d }; });
-
-/*
-var static = {
-  start: 2015,
-  end: 2040,
-  barSize: 75,
-  width: 800,
-  height: 150,
-}
-
-var dynamic = {
-  xDomain: range(2015,2040),
-  yDomain: [0,2500],
-  xmin: 2020,
-  xmax: 2030,  
-  data: dummyData
-}
-*/
-
-console.table(dynamic.data);
-
 var svg = d3.select(el);
-
-
 var bars = svg.selectAll('rect')
             .data(static.data, function(d) { return d.key; });
 
-
-
-// RENDER
-instance.render = function() {
-
 var xScale = d3.scale.ordinal()
                 .domain(static.xDomain)
-                .rangeRoundBands([0,800], 0.05);                
+                .rangeRoundBands([0,800], static.gap);                
 var yScale = d3.scale.linear()
                 .domain(static.yDomain)
                 .range([0,static.barSize]);
+
+
+// RENDER CHART
+instance.render = function() {
 
                 bars
                     .enter()
@@ -91,34 +72,37 @@ var yScale = d3.scale.linear()
                         year: function(d) { return d.key; },
                         value: function(d) { return d.value; }                   
                     })
-                    .style('fill', function(d) {
-                        return ((d.key >= dynamic.xmin) && (d.key <= dynamic.xmax)) ? '#00b5e2' : '#b5b5b5';                    
-                    });  
+                    .style('fill', 'white');  
 
         var xAxis = d3.svg.axis()
                     .scale(xScale)
                     .orient('bottom')
-                    .tickValues(range(2015,2040,5));
+                    .tickValues(static.tickValues);
             svg.append('g')
                     .attr('class', 'xAxis')
                     .attr('transform', 'translate(0,' + (static.barSize + 5) + ')')
                     .call(xAxis);
 
+            svg.append('text')
+                .text(static.xLabel)
+                .style('font-size', 18)
+                .attr({ x: 0, y: 20 });    
+
     return instance;
  };
  
- // UPDATE
- instance.update = function(newSettings) {
+// UPDATE CHART
+instance.update = function(newSettings) {
 
-console.log('updating yChart...');
-console.table(newSettings.data);
 
+/*
 var xScale = d3.scale.ordinal()
                 .domain(static.xDomain)
                 .rangeRoundBands([0,800], 0.05);                
 var yScale = d3.scale.linear()
                 .domain(static.yDomain)
                 .range([0,static.barSize]);
+*/
 
                 bars
                     .attr({ width: xScale.rangeBand(),
@@ -132,22 +116,105 @@ var yScale = d3.scale.linear()
                         return ((d.key >= newSettings.xmin) && (d.key <= newSettings.xmax)) ? '#00b5e2' : '#b5b5b5';                    
                     });
 
-/*
-        var xAxis = d3.svg.axis()
-                    .scale(xScale)
-                    .orient('bottom')
-                    .tickValues(range(2015,2040,5));
-            svg.append('g')
-                    .attr('class', 'xAxis')
-                    .attr('transform', 'translate(0,' + (static.barSize + 5) + ')')
-                    .call(xAxis);
-*/
+                bars.exit().remove();
+
 
     return instance;
  };
- 
- 
 
 return instance;
                                        
 }                    
+
+
+
+
+
+
+
+/*
+    If given an svg selection and two objects of settings, appends a bar chart and returns it
+*/
+function verticalBarChart(el, static, dynamic) {
+
+var instance = {};
+var svg = d3.select(el);
+var bars = svg.selectAll('rect')
+            .data(static.data, function(d) { return d.key; });
+
+var xScale = d3.scale.ordinal()
+                .domain(static.xDomain)
+                .rangeRoundBands([static.height,0], static.gap);                
+var yScale = d3.scale.linear()
+                .domain(static.yDomain)
+                .range([0,static.barSize]);
+
+
+// RENDER CHART
+instance.render = function() {
+
+                bars
+                    .enter()
+                    .append('rect')
+                    .attr({ height: xScale.rangeBand(),
+                        width: function(d) { return Math.abs(yScale(d.value)); },
+                        y: function(d) { return xScale(d.key); },
+                        x: function(d) { return yScale(d.value) >= 0 ? static.barSize - yScale(d.value) : static.barSize; },   //-----//
+                        age: function(d) { return d.key; },
+                        value: function(d) { return d.value; }                   
+                    })
+                    .style('fill', 'white');  
+
+        var xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient('right')
+                    .tickValues(static.tickValues);
+            svg.append('g')
+                    .attr('class', 'xAxis')
+                    .attr('transform', 'translate(' + (static.barSize + 5) + ',0)')
+                    .call(xAxis);
+
+            svg.append('text')
+                .text(static.xLabel)
+                .style('font-size', 18)
+                .attr({ x: 10, y: 20 });    
+
+    return instance;
+ };
+ 
+// UPDATE CHART
+instance.update = function(newSettings) {
+
+console.log('updating aChart...');
+
+/*
+var xScale = d3.scale.ordinal()
+                .domain(static.xDomain)
+                .rangeRoundBands([0,800], 0.05);                
+var yScale = d3.scale.linear()
+                .domain(static.yDomain)
+                .range([0,static.barSize]);
+*/
+
+                bars
+                    .attr({ height: xScale.rangeBand(),
+                        width: function(d) { return Math.abs(yScale(d.value)); },
+                        y: function(d) { return xScale(d.key); },
+                        x: function(d) { return yScale(d.value) >= 0 ? static.barSize - yScale(d.value) : static.barSize; },   //-----//
+                        age: function(d) { return d.key; },
+                        value: function(d) { return d.value; }                   
+                    })
+                    .style('fill', function(d) {
+                        return ((d.key >= newSettings.xmin) && (d.key <= newSettings.xmax)) ? '#00b5e2' : '#b5b5b5';                    
+                    });  
+
+                bars.exit().remove();
+
+
+    return instance;
+ };
+
+return instance;
+                                       
+}                    
+
