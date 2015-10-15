@@ -6,15 +6,16 @@
 
 
 
-<script src='Tangle-0.1.0/Tangle.js' type='text/javascript'></script>
-<link rel="stylesheet" href='Tangle-0.1.0/TangleKit/TangleKit.css' type='text/css'></style>
-<script src='Tangle-0.1.0/TangleKit/mootools.js' type='text/javascript'></script>
-<script src='Tangle-0.1.0/TangleKit/sprintf.js' type='text/javascript'></script>
-<script src='Tangle-0.1.0/TangleKit/BVTouchable.js' type='text/javascript'></script>
-<script src='Tangle-0.1.0/TangleKit/TangleKit.js' type='text/javascript'></script>
-<script src='d3/d3.min.js'></script>
-<script src='crossfilter.min.js'></script>
-<!-- <script src='dc.js-2.0.0-beta.19/dc.min.js'></script> -->
+<script src='js/Tangle-0.1.0/Tangle.js' type='text/javascript'></script>
+<link rel="stylesheet" href='js/Tangle-0.1.0/TangleKit/TangleKit.css' type='text/css'></style>
+<script src='js/Tangle-0.1.0/TangleKit/mootools.js' type='text/javascript'></script>
+<script src='js/Tangle-0.1.0/TangleKit/sprintf.js' type='text/javascript'></script>
+<script src='js/Tangle-0.1.0/TangleKit/BVTouchable.js' type='text/javascript'></script>
+<script src='js/Tangle-0.1.0/TangleKit/TangleKit.js' type='text/javascript'></script>
+<script src='js/d3/d3.min.js'></script>
+<script src='js/crossfilter.min.js'></script>
+<script src='js/helpers.js'></script>
+<!-- <script src='js/dc.js-2.0.0-beta.19/dc.min.js'></script> -->
 
 
 
@@ -73,6 +74,15 @@ font-size: 30px;
     width: 800px;
     left: 150px;    
 }
+
+#yChart {
+    position: absolute;
+    top: 250px;
+    height: 150px;
+    width: 800px;
+    left: 150px;    
+}
+
 
 #svg {
     display: inline;
@@ -181,6 +191,7 @@ indicatorBar {
 
 
 <script type='text/javascript'>
+
 
 
 
@@ -316,25 +327,11 @@ var range = function(n) { return Array.apply(null, Array(n)).map(function (_, i)
 console.log('range 1-5 => ' + range(5));
 */
 
-var range = function(from,to,step) { 
-                        step = step || 1;
-                        from = from || 0;                        
-                        to = to || 1;
-                        
-                        var len = to - from + 1;
-                        
-                        return Array.apply(null, Array(len)).map(function (_, i) {return from+i;})
-                                    .filter(function(n,i) { return ((n - from) % step) == 0; } ); 
-                                    };
+
+
                                     
 console.log('range 0-100 step 5 => ' + range(0,100,5));
 
-
-var roundn = function(n) {
-    return function(m) {
-        return(Math.round(m/n)*n);
-    }
-}
 
 var round5 = roundn(5);
 var round50 = roundn(50);
@@ -463,35 +460,13 @@ initialize: function() {
                   this.maxAge = 100;
 
                     this.data = json;
-                    //this.startData = this.data.slice(0,102);
                     this.changeData = this.data.slice(101, this.data.length);
                     this.xf = crossfilter(this.changeData);
                     this.yearDimension = this.xf.dimension(function(d) { return d.year; });
                     this.ageDimension = this.xf.dimension(function(d) { return d.age; });
                     this.popDimension = this.xf.dimension(function(d) { return d.s; });
 
-
-                    console.table(this.startData);
-                                        
-                    //this.startxf = crossfilter(this.startData);
-                    //this.startYearPop = this.startxf.dimension(function(d) { return d.age; });
-                    
-                    this.changeByYear = [];
-                    this.yearData = [];
-
-
-                 //init(this.start, this.end, this.nYears, 150000, this.peoplePerHouse * 100, this.nHouses, this.maxHouses);
-
-
-
-/*
-//d3.select('#timelineContainer')
-d3.select('#yearChartContainer')
-    //.append('div').attr('id', 'yearChartContainer')
-    .append('svg').attr('id', 'yearChart');
-    */
-// append bar chart
-
+//-----//
                   this.yearFilter = [this.start, this.end + 1];
                   this.changeByYear = this.yearDimension.filterRange(this.yearFilter)
                                         .group().reduceSum(function(d) { return d.s; });
@@ -499,6 +474,47 @@ d3.select('#yearChartContainer')
                   this.changeByAge = this.ageDimension.filterRange(this.ageFilter).group()
                                           .reduceSum(function(d) { return d.s; });                  
 //-----//
+                    // this.changeByYear = [{key: 2020, value: 2000}];
+                    this.yearData = [];
+                    
+                    //this.startData = this.data.slice(0,102);
+                    //console.table(this.startData);                  
+                    //this.startxf = crossfilter(this.startData);
+                    //this.startYearPop = this.startxf.dimension(function(d) { return d.age; });
+                    //init(this.start, this.end, this.nYears, 150000, this.peoplePerHouse * 100, this.nHouses, this.maxHouses);
+
+
+
+//-----//
+
+var staticSettings = {
+  start: this.firstYear,
+  end: this.lastYear,
+  barSize: 75,
+  width: 800,
+  height: 150,
+  xDomain: range(this.firstYear,this.lastYear),
+  yDomain: [0,7000],
+  data: this.changeByYear.all()  
+};
+
+var dynamicSettings = {
+  xmin: this.start,
+  xmax: this.end,  
+};
+
+
+this.yChart = horizontalBarChart('svg', staticSettings, dynamicSettings);
+this.yChart.render();
+
+
+
+//-----//
+
+// append bar chart
+
+
+
 
 this.width = 800;
 this.height = 100;
@@ -699,7 +715,7 @@ update: function() {
 
 
                 //console.table(this.changeByAge.all());
-                //console.table(this.changeByYear.all());
+                console.table(this.changeByYear.all());
                 //console.log("total befolkningstillväxt >> " + this.yearDimension.groupAll()
                 //            .reduceSum(function(d) { return d.s; }).value());
                 
@@ -858,6 +874,10 @@ this.nPrimaryschoolChildren * this.childrenPerPrimaryschool
 
 //------//
 
+this.yChart.update({ xmin: this.start, xmax: this.end });
+
+//------//
+
 
 
 this.width = 800;
@@ -955,6 +975,10 @@ var maxAgeScaled = ageScale(this.maxAge);
 
 setUpTangle();
 */
+
+
+
+
 
 
                     return json;
@@ -1070,6 +1094,8 @@ setUpTangle();
          
                   
          <div id="result">
+         
+                    <svg id="yChart"></svg>
 
                     <svg id="ageChart"></svg>
                     
