@@ -14,7 +14,7 @@
 <script src='Tangle-0.1.0/TangleKit/TangleKit.js' type='text/javascript'></script>
 <script src='d3/d3.min.js'></script>
 <script src='crossfilter.min.js'></script>
-<script src='dc.js-2.0.0-beta.19/dc.min.js'></script>
+<!-- <script src='dc.js-2.0.0-beta.19/dc.min.js'></script> -->
 
 
 
@@ -54,7 +54,7 @@ font-size: 30px;
     width: 800px;
     height: 150px;    
     left: 150px;
-    top: 800px;
+    top: 500px;
 }
 
 #timeline {
@@ -68,7 +68,7 @@ font-size: 30px;
 
 #yearChart {
     position: absolute;
-    top: 700px;
+    top: 400px;
     height: 150px;
     width: 800px;
     left: 150px;    
@@ -80,7 +80,7 @@ font-size: 30px;
     width: 800px;
     height: 600px;  
     left: 150px;
-    top: 800px;
+    top: 500px;
     background-color: white;
     
 //    background-image: url(bg.png);
@@ -94,9 +94,21 @@ font-size: 30px;
     height: 600px;
     width:150px;  
     left: 0px;
-    top: 800px;
+    top: 500px;
     background-color: white;
 
+}
+
+
+.widget {
+    position: relative;
+    width: 800px;
+    left: 300px;
+}
+
+
+.widget:hover {
+    background-color: #e0e0e0;
 }
 
 indicatorBar {
@@ -148,11 +160,7 @@ indicatorBar {
     font-size: 11px;
 }
 
-/*
-p:hover {
-    background-color: #e0e0e0;
-}
-*/
+
 
 .brush .extent {
   stroke: #000;
@@ -246,14 +254,80 @@ var house = d3.select('#svg').selectAll('polygon')
 
 </script>
 
+   </head>
+  <!-- <body onload="setUpTangle()"> -->
+  <body>
 
+
+
+
+
+    <!-- Productivity -->
+    <p id="productivity" class="widget">
+         <span data-var="nProductivePart"></span> fler i åldrarna 20-64 innebär att 
+         <span data-var="shareProductivePart" data-format="%.1f">%</span> av de nya malmöborna 
+         <span data-var='start'></span> - <span data-var='end'></span> är i yrkesverksam ålder. 
+         Om vi räknar på de nya malmöborna utan att ta hänsyn till befintlig befolkning så är försörjningskvoten 
+         <span data-var="dependencyRatio"></span>. Detta är det antal personer varje 
+        individ i yrkesverksam ålder måste försörja, inklusive sig själv. Att en relativt stor del 
+        av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot 
+        (1,60) väntas öka till 1,66 år 2025 och ... år 2040. Det ställer stora krav på sysselsättningen. 
+    </p>
+    <!-- /Productivity -->
+
+
+    <!-- Housing -->
+    <p id="housing" class="widget">
+         <span data-var="nPeople"></span> nya invånare kräver 
+         <span data-var='appartments'> lägenheter om antalet boende per lägenhet är </span> 
+         <span data-var='peoplePerAppartment' class="TKAdjustableNumber" data-min="2" data-max="10"> personer.</span> (boendetäthet 2014=?) 
+         Fördelat på <span data-var='nYears'> år</span> motsvarar det en byggtakt på cirka 
+         <span data-var='appartmentsPerYear'></span> lägenheter/år som ska vara inflyttningsklara från och med 
+         <span data-var='start'></span>. Under de senaste 10 åren har det i snitt byggstartats nära 1300 bostäder i Malmö. 
+         En boendetäthet på <span data-var='peoplePerAppartment'> personer/lägenhet</span> innebär att byggtakten behöver förändras med 
+         <span id='plus' class='TKIf' data-var='plus'>+</span><span data-var='appartmentsPerYearChange' id='appartmentsPerYearChange'></span> lägenheter/år. 
+         Varje hus i diagrammet nedan representerar 1000 lägenheter. 
+    </p>
+    <!-- /Housing -->
+
+
+    <!-- Preschool -->
+    <p id="preschool" class="widget">
+         <span data-var="nPreschoolChildren"></span> nya 1-5åringar motsvarar 
+         <span data-var='nPreschools'> förskolor om varje enhet rymmer </span> 
+         <span data-var='childrenPerPreschool' class="TKAdjustableNumber" data-min="20" data-max="60"> barn.</span><br>
+         <span id="preschoolBar" class="indicatorBar"></span>
+    </p>
+    <!-- /Preschool -->
+
+    <!-- Primary school -->
+    <p id="primaryschool" class="widget">
+         <span data-var="nPrimaryschoolChildren"></span> nya 6-15åringar skapar ett behov av 
+         <span data-var='nPrimaryschools'> nya grundskolor om varje enhet rymmer </span>
+         <span data-var='childrenPerPrimaryschool' class="TKAdjustableNumber" data-min="3" data-max="10">00 barn.</span>
+    </p>
+    <!-- /Primary school -->
 
 
 
 <script type='text/javascript'>
+/*
+var range = function(n) { return Array.apply(null, Array(n)).map(function (_, i) {return i+1;}); };
+console.log('range 1-5 => ' + range(5));
+*/
 
-var cumsum = function(arr) { return (arr.map(function(n,i) { return arr.slice(0,i+1).reduce(function(x,y) { return x + y; }); })); }
-
+var range = function(from,to,step) { 
+                        step = step || 1;
+                        from = from || 0;                        
+                        to = to || 1;
+                        
+                        var len = to - from + 1;
+                        
+                        return Array.apply(null, Array(len)).map(function (_, i) {return from+i;})
+                                    .filter(function(n,i) { return ((n - from) % step) == 0; } ); 
+                                    };
+                                    
+console.log('range 0-100 step 5 => ' + range(0,100,5));
 
 
 var roundn = function(n) {
@@ -264,6 +338,94 @@ var roundn = function(n) {
 
 var round5 = roundn(5);
 var round50 = roundn(50);
+
+
+
+var preschoolTangle = new Tangle(document.getElementById('preschool'), {
+    initialize: function () { console.log('PRESCHOOL INITIALIZED...');
+        
+                              this.start = 2015; 
+                              this.end = 2040;
+                              this.nPreschoolChildren = 0;
+                              this.childrenPerPreschool = 40;
+                              this.shareProductivePart = 0;
+                            },
+    update:     function () { this.perCapita= 1/this.childrenPerPreschool;
+                              this.nPreschools = Math.ceil(this.nPreschoolChildren * this.perCapita);
+ }
+});
+
+var primaryschoolTangle = new Tangle(document.getElementById('primaryschool'), {
+    initialize: function () { console.log('PRIMARY SCHOOL INITIALIZED...');
+        
+                              this.start = 2015; 
+                              this.end = 2040;
+                              this.nPrimaryschoolChildren = 0;
+                              this.childrenPerPrimaryschool = 5;
+                              this.shareProductivePart = 0;
+                            },
+    update:     function () { this.perCapita = 1/this.childrenPerPrimaryschool;
+                              this.nPrimaryschools = Math.ceil(this.nPrimaryschoolChildren * this.perCapita);
+ }
+});
+
+
+
+var productivityTangle = new Tangle(document.getElementById('productivity'), {
+    initialize: function () { console.log('PRODUCTIVITY INITIALIZED...');
+        
+                              this.start = 2015; 
+                              this.end = 2040;
+                              this.nProductivePart = 0;
+                              this.dependencyRatio = 0;
+                              this.shareProductivePart = 0;
+                            },
+    update:     function () { console.log('PRODUCTIVITY UPDATED...');
+ }
+});
+
+
+
+var housingTangle = new Tangle(document.getElementById('housing'), {
+    initialize: function () { this.start = 2015;
+                              this.end = 2040;
+                              this.nYears = this.end - this.start + 1;
+                              this.nPeople = 0;
+                              this.appartments = 0;
+                              this.peoplePerAppartment = 3;
+                              this.appartmentsPerYear = 0;
+                              this.appartmentsPerYearChange = 0;
+                              this.plus = true;
+                              this.appartmentsPerHouse = 1000;
+                              this.maxHouses = 150;                 
+                            },
+    update:     function () { this.nYears = this.end - this.start + 1;
+                              this.perCapita = 1/this.peoplePerAppartment;
+                              this.appartments = Math.ceil(this.nPeople * this.perCapita);
+                              this.appartmentsPerYear = round5(this.appartments/this.nYears);
+                              this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;
+                              this.plus = this.appartmentsPerYearChange >= 0;
+                              document.getElementById('appartmentsPerYearChange').style.color = this.appartmentsPerYearChange >= 0 ? 'red' : 'green'; 
+
+                              this.nHouses = Math.ceil(this.appartments / this.appartmentsPerHouse);  
+                              this.houseData = range(1,this.nHouses);
+    console.log('this.houseData => ' + this.houseData); 
+                              update(this.houseData, this.maxHouses);
+
+ }
+});
+
+
+
+
+var cumsum = function(arr) { return (arr.map(function(n,i) { return arr.slice(0,i+1).reduce(function(x,y) { return x + y; }); })); }
+
+
+
+
+
+
+
 
 
 var makeAgeGroup = function(min,max,thing,perCapita) { return { min: min,
@@ -317,8 +479,7 @@ initialize: function() {
                     this.changeByYear = [];
                     this.yearData = [];
 
-                 this.maxHouses = 150;                 
-                 this.nHouses = 0;
+
                  //init(this.start, this.end, this.nYears, 150000, this.peoplePerHouse * 100, this.nHouses, this.maxHouses);
 
 
@@ -379,7 +540,8 @@ console.log('min, max => ' + d3.min(that.changeByYear.all(), function(d) { retur
         this.xAxisYear = d3.svg.axis()
                     .scale(yearScale)
                     .orient('bottom')
-                    .tickValues([2015,2020,2025,2030,2035,2040]);
+                    .tickValues(range(2015,2040,5));
+                    //.tickValues([2015,2020,2025,2030,2035,2040]);
         this.yearSvg.append('g')
                     .attr('class', 'xAxis')
                     .attr('transform', 'translate(0,' + (this.barSize + 5) + ')')
@@ -433,7 +595,8 @@ console.log('min, max => ' + d3.min(that.changeByAge.all(), function(d) { return
         this.xAxisAge = d3.svg.axis()
                     .scale(ageScale)
                     .orient('right')
-                    .tickValues([0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]);
+                    .tickValues(range(0,100,5));
+                    //.tickValues([0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]);
         this.ageSvg.append('g')
                     .attr('class', 'xAxis')
                     .attr('transform', 'translate(' + (this.barSize + 5) + ',0)')
@@ -444,17 +607,23 @@ this.ageSvg.append('text')
             .style('font-size', 18)
             .attr({ x: 10, y: 20 });                    
 
+var minAgeScaled = ageScale(this.minAge) + ageScale.rangeBand();
+var maxAgeScaled = ageScale(this.maxAge);
 
+
+this.ageIndicatorMin = this.ageSvg.append('line')
+                        .attr({ x1: 0, x2: 75, y1: minAgeScaled, y2: minAgeScaled,
+                                "stroke-width": 1, stroke: 'black' });
+
+this.ageIndicatorMax = this.ageSvg.append('line')
+                        .attr({ x1: 0, x2: 75, y1: maxAgeScaled, y2: maxAgeScaled,
+                                "stroke-width": 1, stroke: 'black' });
 
 
 
 //-----//
 
-this.nPeople = 0;
-this.appartments = 0;
-this.peoplePerAppartment = 3;
-this.appartmentsPerYear = 0;
-this.appartmentsPerHouse = 1000;
+
 this.nPreschoolChildren = 0;
 this.preschool = 0;
 this.childrenPerPreschool = 30;
@@ -603,23 +772,44 @@ update: function() {
                 console.log('sum of all ages => ' + this.allAges.n);
 
 
+// PRODUCTIVITY
+// antal i yrkesverksam ålder 2014: 198463
+// räknar bara på förändringen
+
 this.nProductivePart = this.n20_64.n;
 this.dependencyRatio = Math.round((this.allAges.n / this.nProductivePart)*100)/100;
 this.shareProductivePart = 100 * 1/this.dependencyRatio;
 
-// antal i yrkesverksam ålder 2014: 198463
-// räknar bara på förändringen
+productivityTangle.setValues({  start: this.start, end: this.end,
+                                nProductivePart: this.nProductivePart,
+                                dependencyRatio: this.dependencyRatio,
+                                shareProductivePart: this.shareProductivePart                                
+        });
 
 
-//-----//
 
+// HOUSING
+
+/*
 this.nPeople = round50(this.allAges.n);
 this.allAges.perCapita = 1/this.peoplePerAppartment;
 this.appartments = Math.ceil(this.allAges.n * this.allAges.perCapita);
 this.appartmentsPerYear = round5(this.appartments/this.nYears);
 this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;
+*/
+
+housingTangle.setValues({ start: this.start, end: this.end, 
+                          nPeople: round50(this.allAges.n)
+});
 
 
+
+
+//-----//
+
+// PRESCHOOL
+
+/*
 this.nPreschoolChildren = round50(this.n1_5.n);
 this.n1_5.perCapita = 1/this.childrenPerPreschool;
 this.preschool = Math.ceil(this.n1_5.n * this.n1_5.perCapita);
@@ -627,23 +817,43 @@ this.preschool = Math.ceil(this.n1_5.n * this.n1_5.perCapita);
 
 console.log('Med ' + this.n1_5.n + ' nya barn och ' + Math.round(1/this.n1_5.perCapita) + ' barn per förskola behöver vi bygga ' + Math.ceil(this.n1_5.n * this.n1_5.perCapita) + ' ' + this.n1_5.thing 
             + ' vilket motsvarar ' + Math.ceil((this.n1_5.n * this.n1_5.perCapita)/this.nYears) + ' förskolor per år. ');
+*/
 
+preschoolTangle.setValues({ start: this.start, end: this.end, 
+                            nPreschoolChildren: round50(this.n1_5.n)
+});
+
+
+// PRIMARY SCHOOL
+/*
 this.nPrimaryschoolChildren = round50(this.n6_15.n);
 this.n6_15.perCapita = 1/(this.childrenPerPrimaryschool * 100);
 this.primaryschool = Math.ceil(this.n6_15.n * this.n6_15.perCapita);
+*/
+
+
+primaryschoolTangle.setValues({ start: this.start, end: this.end, 
+                                nPrimaryschoolChildren: round50(this.n6_15.n)
+});
+
+
+/*
+this.nPreschoolChildren * this.childrenPerPreschool
+this.nPrimaryschoolChildren * this.childrenPerPrimaryschool
+*/
 
 
 //------//
 
 
-
+/*
     this.nHouses = Math.ceil(this.appartments / this.appartmentsPerHouse);  
 
-    this.houseData = range(this.nHouses);
+    this.houseData = range(0,this.nHouses);
     //console.log('this.houseData => ' + this.houseData); 
 
     update(this.houseData, this.maxHouses);
-    
+*/    
     
 
 //------//
@@ -689,7 +899,6 @@ var yScaleYear = d3.scale.linear()
                 
 
 
-
 //-----//
 
 
@@ -717,6 +926,18 @@ var yScaleAge = d3.scale.linear()
                 this.ageBars.exit().remove();
 
 
+var minAgeScaled = ageScale(this.minAge) + ageScale.rangeBand();
+var maxAgeScaled = ageScale(this.maxAge);
+
+
+        this.ageIndicatorMin
+            .attr({ y1: minAgeScaled, y2: minAgeScaled });
+
+        this.ageIndicatorMax
+            .attr({ y1: maxAgeScaled, y2: maxAgeScaled });
+
+
+
 
 //-----//
 
@@ -725,9 +946,9 @@ var yScaleAge = d3.scale.linear()
         }
     }
     
-    var tangle = new Tangle(rootElement, model);
+    var mainTangle = new Tangle(rootElement, model);
 
-console.log('getValue --> ' + tangle.getValue("nPreschoolChildren"));
+
 
 /*
 }
@@ -743,17 +964,12 @@ setUpTangle();
 //-------//
 
 
-var range = function(n) { return Array.apply(null, Array(n)).map(function (_, i) {return i+1;}); };
-console.log('range 1-5 => ' + range(5));
 
 
 
 </script>
 
 
-   </head>
-  <!-- <body onload="setUpTangle()"> -->
-  <body>
 
 
    <div id='controls'>
@@ -777,11 +993,12 @@ console.log('range 1-5 => ' + range(5));
          <span data-var='maxAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span>. 
          
     </p>
-    <p>
 
+<!--
+    <p>
          <span data-var="nPeople"></span> nya invånare kräver 
          <span data-var='appartments'> lägenheter om antalet boende per lägenhet är </span> 
-         <span data-var='peoplePerAppartment' class="TKAdjustableNumber" data-min="1" data-max="10"> personer.</span> (boendetäthet 2014=?) 
+         <span data-var='peoplePerAppartment' class="TKAdjustableNumber" data-min="2" data-max="10"> personer.</span> (boendetäthet 2014=?) 
          Fördelat på <span data-var='nYears'> år</span> motsvarar det en byggtakt på cirka 
          <span data-var='appartmentsPerYear'></span> lägenheter/år som ska vara inflyttningsklara från och med 
          <span data-var='start'></span>. Under de senaste 10 åren har det i snitt byggstartats nära 1300 bostäder i Malmö. 
@@ -801,7 +1018,9 @@ console.log('range 1-5 => ' + range(5));
          <span data-var='childrenPerPrimaryschool' class="TKAdjustableNumber" data-min="3" data-max="10">00 barn.</span>
     </p>
 
+-->
 
+<!--      
     <p>
          <span data-var="nProductivePart"></span> fler i åldrarna 20-64 innebär att 
          <span data-var="shareProductivePart" data-format="%.1f">%</span> av de nya malmöborna 
@@ -811,9 +1030,8 @@ console.log('range 1-5 => ' + range(5));
         individ i yrkesverksam ålder måste försörja, inklusive sig själv. Att en relativt stor del 
         av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot 
         (1,60) väntas öka till 1,66 år 2025 och ... år 2040. Det ställer stora krav på sysselsättningen. 
-          
     </p>         
-
+-->
          
          Nedan visas tänkbara konsekvenser av befolkningstillväxten 
          <span data-var="showTotal" class="TKToggle TKSwitch">
@@ -860,7 +1078,10 @@ console.log('range 1-5 => ' + range(5));
 
                     <svg id="svg"></svg>
       </div> <!-- tangle end -->
-</div>
+    </div> 
+
+
+
 
 
 
