@@ -66,7 +66,7 @@ instance.render = function() {
                     .enter()
                     .append('rect')
                     .attr({ width: xScale.rangeBand(),
-                        height: function(d) { return yScale(d.value); },
+                        height: function(d) { return d.value < 0 ? 0 : yScale(d.value); },
                         x: function(d) { return xScale(d.key); },
                         y: function(d) { return 75 - yScale(d.value); },   //-----//
                         year: function(d) { return d.key; },
@@ -88,6 +88,7 @@ instance.render = function() {
                 .style('font-size', 18)
                 .attr({ x: 0, y: 20 });    
 
+
     return instance;
  };
  
@@ -95,25 +96,16 @@ instance.render = function() {
 instance.update = function(newSettings) {
 
 
-/*
-var xScale = d3.scale.ordinal()
-                .domain(static.xDomain)
-                .rangeRoundBands([0,800], 0.05);                
-var yScale = d3.scale.linear()
-                .domain(static.yDomain)
-                .range([0,static.barSize]);
-*/
-
                 bars
                     .attr({ width: xScale.rangeBand(),
-                        height: function(d) { return yScale(d.value); },
+                        height: function(d) { return Math.abs(yScale(d.value)); },
                         x: function(d) { return xScale(d.key); },
-                        y: function(d) { return 75 - yScale(d.value); },   //-----//
+                        y: function(d) { return d.value >= 0 ? static.barSize - yScale(d.value) : static.barSize; },   //-----//
                         year: function(d) { return d.key; },
                         value: function(d) { return d.value; }                   
                     })
                     .style('fill', function(d) {
-                        return ((d.key >= newSettings.xmin) && (d.key <= newSettings.xmax)) ? '#00b5e2' : '#b5b5b5';                    
+                        return ((d.key >= newSettings.xmin) && (d.key <= newSettings.xmax)) ? '#00b5e2' : '#b5b5b5'; 
                     });
 
                 bars.exit().remove();
@@ -149,6 +141,8 @@ var yScale = d3.scale.linear()
                 .domain(static.yDomain)
                 .range([0,static.barSize]);
 
+var minXScaled, maxXScaled, xIndicatorMin, xIndicatorMax;
+
 
 // RENDER CHART
 instance.render = function() {
@@ -179,22 +173,23 @@ instance.render = function() {
                 .style('font-size', 18)
                 .attr({ x: 10, y: 20 });    
 
+
+    minXScaled = xScale(dynamic.xmin) + xScale.rangeBand();
+    maxXScaled = xScale(dynamic.xmax);
+
+    xIndicatorMin = svg.append('line')
+                        .attr({ x1: 0, x2: static.barSize, y1: minXScaled, y2: minXScaled,
+                                "stroke-width": 1, stroke: 'black' });
+
+    xIndicatorMax = svg.append('line')
+                        .attr({ x1: 0, x2: 75, y1: maxXScaled, y2: maxXScaled,
+                                "stroke-width": 1, stroke: 'black' });
+
     return instance;
  };
  
 // UPDATE CHART
 instance.update = function(newSettings) {
-
-console.log('updating aChart...');
-
-/*
-var xScale = d3.scale.ordinal()
-                .domain(static.xDomain)
-                .rangeRoundBands([0,800], 0.05);                
-var yScale = d3.scale.linear()
-                .domain(static.yDomain)
-                .range([0,static.barSize]);
-*/
 
                 bars
                     .attr({ height: xScale.rangeBand(),
@@ -210,6 +205,13 @@ var yScale = d3.scale.linear()
 
                 bars.exit().remove();
 
+    minXScaled = xScale(newSettings.xmin) + xScale.rangeBand();
+    maxXScaled = xScale(newSettings.xmax);                
+
+        xIndicatorMin
+            .attr({ y1: minXScaled, y2: minXScaled });
+        xIndicatorMax
+            .attr({ y1: maxXScaled, y2: maxXScaled });
 
     return instance;
  };
@@ -218,3 +220,9 @@ return instance;
                                        
 }                    
 
+
+
+
+        
+        
+        

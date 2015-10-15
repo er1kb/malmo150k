@@ -161,12 +161,18 @@ indicatorBar {
 }
 
 
-
 .brush .extent {
   stroke: #000;
   fill-opacity: .125;
   fill: #b5b5b5;
   shape-rendering: crispEdges;
+}
+
+.resize {
+    width: 10px;
+    height: 150px;
+    fill: purple;
+    fill-opacity: 0.3;
 }
 
 
@@ -537,85 +543,8 @@ this.ageChart.render();
 
 // AGE CHART
 
-var that = this;
-this.width = 800;
-this.height = 100;
-this.barSize = 75;
-
-
-var ageScale = d3.scale.ordinal()
-                .domain(this.changeByAge.all().map(function(d) { return d.key; }))
-                .rangeRoundBands([600,0], 0.15);                
-
-
-/*
-
-var yScaleAge = d3.scale.linear()
-                .domain([0,2500])
-                .range([0,this.barSize]);
-
-this.ageSvg = d3.select('#ageChart');
-
-this.ageBars = this.ageSvg
-                .selectAll('rect')           
-                .data(this.changeByAge.all(), function(d) { return d.key; });
-
-console.log('min, max => ' + d3.min(that.changeByAge.all(), function(d) { return d.value; }) + ', ' +
-                             d3.max(that.changeByAge.all(), function(d) { return d.value; }));
-
-
-                this.ageBars
-                    .enter()
-                    .append('rect')
-                    .attr({ height: ageScale.rangeBand(),
-                        width: function(d) { return Math.abs(yScaleAge(d.value)); },                        
-                        y: function(d) { return ageScale(d.key); },
-                        x: function(d) { return yScaleAge(d.value) >= 0 ? 75 - yScaleAge(d.value) : 75; },   //-----//
-                        age: function(d) { return d.key; },
-                        value: function(d) { return d.value; }                   
-                    })
-                    .style('fill', 'blue');
-
-        this.xAxisAge = d3.svg.axis()
-                    .scale(ageScale)
-                    .orient('right')
-                    .tickValues(range(0,100,5));
-                    //.tickValues([0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]);
-        this.ageSvg.append('g')
-                    .attr('class', 'xAxis')
-                    .attr('transform', 'translate(' + (this.barSize + 5) + ',0)')
-                    .call(this.xAxisAge);
-
-this.ageSvg.append('text')
-            .text("Ålder")
-            .style('font-size', 18)
-            .attr({ x: 10, y: 20 });                    
-
-*/
-
-var minAgeScaled = ageScale(this.minAge) + ageScale.rangeBand();
-var maxAgeScaled = ageScale(this.maxAge);
-
-
-this.ageIndicatorMin = d3.select('#aChart').append('line')
-                        .attr({ x1: 0, x2: 75, y1: minAgeScaled, y2: minAgeScaled,
-                                "stroke-width": 1, stroke: 'black' });
-
-this.ageIndicatorMax = d3.select('#aChart').append('line')
-                        .attr({ x1: 0, x2: 75, y1: maxAgeScaled, y2: maxAgeScaled,
-                                "stroke-width": 1, stroke: 'black' });
-
-
 
 //-----//
-
-
-this.nPreschoolChildren = 0;
-this.preschool = 0;
-this.childrenPerPreschool = 30;
-this.nPrimaryschoolChildren = 0;
-this.primaryschool = 0;
-this.childrenPerPrimaryschool = 5;
 
 
 
@@ -796,55 +725,7 @@ this.yChart.update({ xmin: this.start, xmax: this.end });
 this.ageChart.update({ xmin: this.minAge, xmax: this.maxAge });
 
 
-//------//
-
-
-this.width = 800;
-this.barSize = 75;
-
-var that = this;
-
-var ageScale = d3.scale.ordinal()
-                .domain(this.changeByAge.all().map(function(d) { return d.key; }))
-                .rangeRoundBands([600,0], 0.15);         
-                
-/*
-              
-                       
-var yScaleAge = d3.scale.linear()
-                .domain([0,2500])
-                .range([0,this.barSize]);
-
-
-                this.ageBars
-                    .attr({ height: ageScale.rangeBand(),
-                        width: function(d) { return Math.abs(yScaleAge(d.value)); },                        
-                        y: function(d) { return ageScale(d.key); },
-                        x: function(d) { return yScaleAge(d.value) >= 0 ? 75 - yScaleAge(d.value) : 75; },   //-----//
-                        age: function(d) { return d.key; },
-                        value: function(d) { return d.value; }                   
-                    })
-                    .style('fill', function(d) {
-                        console.log('this.minAge, this.maxAge => ' + that.minAge + ', ' + that.maxAge);                  
-                        return ((d.key >= that.minAge) && (d.key <= that.maxAge)) ? '#00b5e2' : '#b5b5b5';                    
-                    });  
-                    
-                this.ageBars.exit().remove();
-
-*/
-var minAgeScaled = ageScale(this.minAge) + ageScale.rangeBand();
-var maxAgeScaled = ageScale(this.maxAge);
-
-
-        this.ageIndicatorMin
-            .attr({ y1: minAgeScaled, y2: minAgeScaled });
-
-        this.ageIndicatorMax
-            .attr({ y1: maxAgeScaled, y2: maxAgeScaled });
-
-
 //-----//
-
 
 
         }
@@ -852,6 +733,57 @@ var maxAgeScaled = ageScale(this.maxAge);
     
     var mainTangle = new Tangle(rootElement, model);
 
+
+
+//-----//
+
+
+        var brushScaleX = d3.scale.linear()
+                                .domain([2015, 2040])
+                                .range([0,800]);
+
+        var ordinalX = d3.scale.ordinal()
+                                .domain(range(2015,2040))
+                                .range([0,800]);                                
+                                
+        var brush = d3.svg.brush()
+            .x(brushScaleX)
+            .extent([2015, 2025])
+            .on("brush", function() { 
+
+                console.log('brushed... extent => ' + brush.extent().map(function(n) { return Math.round(n); }));
+                var extent0 = brush.extent();
+
+                mainTangle.setValue('start', Math.round(extent0[0]));
+                mainTangle.setValue('end', Math.round(extent0[1]));
+                
+            });                
+        
+        console.log('brush extent >> ' + brush.extent());
+                
+        var gBrush = d3.select('#yearChart')
+                        .append('g')
+                        .attr('id', 'gBrush')
+                        .attr('class', 'brush')
+                        .call(brush);
+
+        d3.select('#yearChart')
+            .on('mouseover', function() {
+                    gBrush.selectAll('.extent').attr('height', 150).style('visibility', 'visible');
+                    gBrush.selectAll('.resize').selectAll('rect')
+                                        .attr({'width': 10, 'height': 150})
+                                        .style({'visibility': 'visible', 'fill': 'purple', 'fill-opacity': '0.3'});
+            })
+            .on('mouseout', function() {
+
+                    gBrush.selectAll('.extent').attr('height', 150).style('visibility', 'hidden');
+                    gBrush.selectAll('.resize').selectAll('rect')
+                                        .attr({'width': 10, 'height': 150})
+                                        .style({'visibility': 'hidden', 'fill': 'purple', 'fill-opacity': '0.3'});
+            });
+        
+
+//-----//
 
 
 /*
@@ -864,10 +796,8 @@ setUpTangle();
 
 
 
-
                     return json;
                 })   // end of d3.json
-
 
 //-------//
 
@@ -979,14 +909,23 @@ setUpTangle();
                   
          <div id="result">
          
-                    <svg id="yearChart"></svg>
+                    <svg id="yearChart">
+                    </svg>
 
                     <svg id="ageChart"></svg>
 
                     <!-- <svg id="svg"></svg> -->
+                    
       </div> <!-- tangle end -->
     </div> 
-
+    
+    <div id="hello">
+    <p id="preschool2" class="widget">
+         Antal 1-5åringar: <span data-var="nPreschoolChildren"></span>,  
+         Antal förskolor: <span data-var='nPreschools'></span>, 
+         Barn per förskola: <span data-var='childrenPerPreschool' class="TKAdjustableNumber" data-min="20" data-max="60"> </span><br>
+    </p>    
+    </div>
 
 
 
