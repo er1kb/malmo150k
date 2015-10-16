@@ -223,6 +223,34 @@ return instance;
 
 
 
+
+
+
+
+/*
+    TangleKit class. Much like TKSwitch except this changes child elements' classes.
+    All the elements are visible, but only one of them is active. 
+*/
+Tangle.classes.TKSwitchActive = {
+    initialize: function (element, options, tangle, variable) {
+        element.addEvent("click", function (event) {
+            var child = event.target;
+            var index = Array.prototype.indexOf.call(element.children, child);            
+            tangle.setValue(variable, index);
+        });
+    },
+
+    update: function (element, value) {
+        element.getChildren().each( function (child, index) {
+            child.classList.remove((index != value) ? "show" : "hide");
+            child.classList.add((index != value) ? "hide" : "show");
+        });
+    }
+};
+
+
+
+
         
         
         
