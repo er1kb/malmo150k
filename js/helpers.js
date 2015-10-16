@@ -1,3 +1,4 @@
+ 
 /* 
     Generates a range of numbers for use with axis labels etc.
         Examples:
@@ -15,6 +16,7 @@ var range = function(from,to,step) {
                                     .filter(function(n,i) { return ((n - from) % step) == 0; } ); 
                                     };
                                     
+
                                     
 /*
     Returns a function which rounds a number to the nearest multiple of another number
@@ -30,6 +32,19 @@ var roundn = function(n) {
     }
 }
 
+
+
+/* 
+    Sum a part of an array of objects (in this case from a crossfilter group reduce), such as a certain age interval.
+        Examples:
+            var data = [{key: 1, value: 500}, {key: 2, value: 200}, {key: 3, value: 400}]; 
+            sumInterval(data, 0, 1) === 700;
+*/
+                  var sumInterval = function(arr, from, to) {
+                     return arr.slice(from, to + 1)
+                        .map(function(d) { return d.value; })
+                               .reduce(function(a,b) { return a + b; });
+                  }
 
 
 /*
@@ -233,10 +248,14 @@ return instance;
 */
 Tangle.classes.TKSwitchActive = {
     initialize: function (element, options, tangle, variable) {
+
         element.addEvent("click", function (event) {
             var child = event.target;
-            var index = Array.prototype.indexOf.call(element.children, child);            
-            tangle.setValue(variable, index);
+            var index = Array.prototype.indexOf.call(element.children, child);
+            var previous = tangle.getValue(variable);            
+            tangle.setValue(variable, index < 0 ? previous : index);  // if no child element was clicked, use previous index
+            console.log('section visible --> ' + (index < 0 ? previous : index));
+
         });
     },
 

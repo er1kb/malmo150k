@@ -30,6 +30,7 @@
     font-size: 24px;
     text-align: left; 
     margin-left:0px;
+    margin-right:0px;
     margin-top:20px;
     margin-bottom:-20px;
     font-size: 26px;    
@@ -72,21 +73,25 @@
 #ageChart {
     position: absolute;
     height: 600px;
-    width:150px;  
+    width: 150px;  
     left: 0px;
+    top: 0px;
     background-color: white;
 }
 
 .widget {
     position: relative;
+    margin-top: 0px;
     width: 800px;
-    left: 300px;
+    height: 600px;
+    /* font-family: Serif, Georgia; */
+    font-size: 22px;
 }
 
 
-.widget:hover {
-    background-color: #e0e0e0;
-}
+/* .widget:hover { */
+/*     background-color: #e0e0e0; */
+/* } */
 
 indicatorBar {
     background-color: #b5b5b5;
@@ -271,8 +276,6 @@ var house = d3.select('#svg').selectAll('polygon')
 
 
 
-
-
 </script>
 
    </head>
@@ -293,7 +296,8 @@ var house = d3.select('#svg').selectAll('polygon')
          <span data-var="dependencyRatio"></span>. Detta är det antal personer varje 
         individ i yrkesverksam ålder måste försörja, inklusive sig själv. Att en relativt stor del 
         av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot 
-        (1,60) väntas öka till 1,66 år 2025 och ... år 2040. Det ställer stora krav på sysselsättningen. 
+        (1,60) väntas öka till 1,66 år 2025 och ... år 2040. Det ställer krav på sysselsättningen och ökar  
+        vikten av att den som kan jobba också ges möjlighet att göra det. 
     </p>
     <!-- /Productivity -->
 
@@ -331,13 +335,135 @@ var house = d3.select('#svg').selectAll('polygon')
     </p>
     <!-- /Primary school -->
 
+
+
+    <!-- Demography -->
+    <div id="demographyWidget" class="widget">
+                    <svg id="ageChart"></svg>
+                    <span style="left:150px; width:650px; position:absolute;">
+                        DEMOGRAPHY WIDGET
+                        <span data-var='lol' class="TKAdjustableNumber" data-min="1" data-max="10" data-step="2">lol</span>
+                    </span>
+                    <br />
+
+
+    </div>
+    <!-- /Demography -->
+
+    <!-- Upper secondary -->
+    <p id="uppersecondaryWidget" class="widget">
+      Gymnasieskolor
+    </p>
+    <!-- /Upper secondary -->
+
+    <!-- Care -->
+    <p id="careWidget" class="widget">
+      Vård och omsorg
+    </p>
+    <!-- /Care -->
+
+    <!-- Business -->
+    <p id="businessWidget" class="widget">
+      Näringsliv
+    </p>
+    <!-- /Business -->
+
+    <!-- Infrastructure -->
+    <p id="infrastructureWidget" class="widget">
+      Infrastruktur
+    </p>
+    <!-- /Infrastructure -->
+
+    <!-- Regional -->
+    <p id="regionalWidget" class="widget">
+      Regionala prognoser
+    </p>
+    <!-- /Regional -->
+
+
+
 </div>
+
+
+   <div id='controls'>
+   
+         <h1 style="display:inline; margin-left:50px; font-family: MyriadPro-Bold, Garamond, Arial, Helvetica, sans-serif">Nya malmöbor 2015-2040</h1>
+        <p id="">
+            Under 
+                <span data-var="start" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
+                - 
+                <span data-var="end" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
+                (en 
+                <span data-var="nYears"></span>-årsperiod)
+                väntas 
+                <span id='group'>invånarantalet</span> 
+                <span id='increase' class='TKIf' data-var='increase'>öka</span> 
+                <span id='decrease' class='TKIf' data-var='decrease'>minska</span> 
+                med <span data-var='change'></span> individer i åldrarna 
+                <span data-var='minAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span> till 
+                <span data-var='maxAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span>. 
+        </p>
+
+
+         <p id="sections" data-var="sectionVisible" class="selector TKSwitchActive">
+         <span id="demography" class="selectorItem show"> De demografiska förändringarna </span> påverkar 
+                <span id="preschool" class="selectorItem hide"> Förskola </span>
+                <span id="primaryschool" class="selectorItem hide"> Grundskola </span>
+                <span id="uppersecondary" class="selectorItem hide"> Gymnasieskola </span>
+                <span id="housing" class="selectorItem hide"> Bostäder </span>
+                <span id="care" class="selectorItem hide"> Vård och omsorg </span>
+                <span id="productivity" class="selectorItem hide"> Skattekraft </span>
+                <span id="business" class="selectorItem hide"> Näringsliv </span>
+                <span id="infrastructure" class="selectorItem hide"> Infrastruktur </span>
+                <span id="regional" class="selectorItem hide"> Regionen </span>
+         </p>
+
+         
+         <p id="ages" data-var="ageVisible" class="selector TKSwitchActive">
+                <span id="totalt" class="selectorItem hide"> totalt </span>
+                || 
+                <span id="totalt" class="selectorItem hide"> 0 </span>
+                <span id="totalt" class="selectorItem hide"> 1-5 </span>
+                <span id="totalt" class="selectorItem hide"> 6-15 </span>
+                <span id="totalt" class="selectorItem hide"> 16-19 </span>
+                <span id="totalt" class="selectorItem hide"> 20-64 </span>
+                <span id="totalt" class="selectorItem hide"> 65-79 </span>
+                <span id="totalt" class="selectorItem hide"> 80+ </span>
+
+         </p>
+                    <svg id="yearChart">
+                    </svg>
+
+      </div> <!-- tangle end -->
+
+
+         <div id="widgetContainer">
+
+                    <!-- <svg id="ageChart"></svg> -->
+
+                    <!-- <svg id="svg"></svg> -->
+                    
+    </div> 
+    
+
 
 <script type='text/javascript'>
 
 
 var round5 = roundn(5);
 var round50 = roundn(50);
+
+var demographyTangle = new Tangle(document.getElementById('demographyWidget'), {
+    initialize: function () { console.log('DEMOGRAPHY INITIALIZED...');
+        
+                              this.start = 2015;
+                              this.end = 2040;
+                              this.lol = 5;
+                            },
+    update:     function () {  
+       console.log('DEMOGRAPHY UPDATED...');
+ }
+});
 
 
 
@@ -421,17 +547,6 @@ var housingTangle = new Tangle(document.getElementById('housingWidget'), {
 
 
 
-var makeAgeGroup = function(min,max,thing,perCapita) { return { min: min,
-                                                                max: max,
-                                                                n: 0,
-                                                                thing: thing,
-                                                                shapePoints: [],
-                                                                perCapita: perCapita
-                                                            };
-                                                    }
-
-
-
                 d3.json("data/data.json", function(error, json) {
                     if (error) return console.warn(error);
                     //console.log(json);
@@ -461,11 +576,14 @@ initialize: function() {
                     this.ageDimension = this.xf.dimension(function(d) { return d.age; });
                     this.popDimension = this.xf.dimension(function(d) { return d.s; });
 
+                  // this.ageFilters = [[0,101],[0,1],[1,6],[6,16],[16,20],[20,65],[65,80],[80,101]];
+                  this.ageVisible = 0;
 //-----//
                   this.yearFilter = [this.start, this.end + 1];
                   this.changeByYear = this.yearDimension.filterRange(this.yearFilter)
                                         .group().reduceSum(function(d) { return d.s; });
                   this.ageFilter = [this.minAge, this.maxAge + 1];
+                  // this.ageFilter = this.ageFilters[this.ageVisible]);
                   this.changeByAge = this.ageDimension.filterRange(this.ageFilter).group()
                                           .reduceSum(function(d) { return d.s; });                  
 //-----//
@@ -474,8 +592,6 @@ initialize: function() {
                     //console.table(this.startData);                  
                     //this.startxf = crossfilter(this.startData);
                     //this.startYearPop = this.startxf.dimension(function(d) { return d.age; });
-                    //init(this.start, this.end, this.nYears, 150000, this.peoplePerHouse * 100, this.nHouses, this.maxHouses);
-
 
 //-----//
 
@@ -499,14 +615,17 @@ var dynamicSettings = {
 };
 
 
-this.yChart = horizontalBarChart('#yearChart', staticSettings, dynamicSettings);
-this.yChart.render();
+this.yearChart = horizontalBarChart('#yearChart', staticSettings, dynamicSettings);
+this.yearChart.render();
+
+this.sectionVisible = 0;
 
 
+this.widgets = ["demographyWidget", "preschoolWidget", "primaryschoolWidget",  
+                "uppersecondaryWidget", "housingWidget", "careWidget", "productivityWidget",  
+                "businessWidget", "infrastructureWidget", "regionalWidget"];
 
-//-----//
-
-
+document.getElementById('widgetContainer').appendChild(document.getElementById(this.widgets[this.sectionVisible]));
 
 //-----//
 
@@ -538,40 +657,9 @@ this.ageChart.render();
 //-----//
 
 this.sectionVisible = 0;
-this.ageVisible = 0;
+// this.ageVisible = 0;
 
 //-----//
-
-
-
-this.n0 = makeAgeGroup(0,0,"någonting",1/10);
-this.n1_5 = makeAgeGroup(1,5,"förskolor",1/this.childrenPerPreschool);
-this.n6_15 = makeAgeGroup(6,15,"grundskolor",1/(this.childrenPerPrimaryschool * 100));
-this.n16_19 = makeAgeGroup(16,19,"gymnasieskolor",1/500);
-this.n20_64 = makeAgeGroup(20,64,"restauranger",1/2000);
-this.n65_79 = makeAgeGroup(65,79,"golfbanor",1/1000);
-this.n80_100 = makeAgeGroup(80,100,"anpassade boenden",1/200);
-this.allAges = makeAgeGroup(0,100,"lägenheter",1/this.peoplePerAppartment);
-
-
-/*
-
-this.show0 = false;
-this.show1_5 = true;
-this.show6_15 = true;
-this.show16_19 = false;
-this.show20_64 = false;
-this.show65_79 = false;
-this.show80_100 = false;
-
-this.showTotal = true;
-
-*/
-
-//-----//
-
-
-
 
                  
                  
@@ -597,88 +685,52 @@ update: function() {
                   this.changeByAge = this.ageDimension.filterRange(this.ageFilter).group()
                                           .reduceSum(function(d) { return d.s; });
 
-
-                //console.table(this.changeByAge.all());
-                //console.table(this.changeByYear.all());
-                //console.log("total befolkningstillväxt >> " + this.yearDimension.groupAll()
-                //            .reduceSum(function(d) { return d.s; }).value());
-                
-                           
-                    //this.popByYear = this.changeByYear.all();
-                    //this.startYearPop = this.popByYear[this.start - this.firstYear];         
-                    //this.endYearPop = cumsum2(this.popByYear.slice(this.start - this.firstYear, this.end - this.firstYear + 1), "s");
-
                   this.change = round5(this.xf.groupAll()
                                             .reduceSum(function(d) { return d.s; })
                                             .value());
 
-                    console.log('total folkökning: ' + this.change);
-
                   this.increase = this.change >= 0;
                   this.decrease = !this.increase;
                   
+//-----//
 
+   for (var i = 0, len = this.widgets.length; i < len; i++) {
+            document.getElementById('inactive').appendChild(document.getElementById(this.widgets[i]));
+   }
+
+   document.getElementById('widgetContainer').appendChild(document.getElementById(this.widgets[this.sectionVisible]));
 
 //-----//
 
-    // ÅLDERSGRUPPER
-                  this.n0.n = this.changeByAge.all().slice(0,1)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n0.n => ' + this.n0.n);
 
-                  this.n1_5.n = this.changeByAge.all().slice(1,6)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n1_5.n => ' + this.n1_5.n);
-                    
-                  this.n6_15.n = this.changeByAge.all().slice(6,16)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n6_15.n => ' + this.n6_15.n);
-                  
-                  this.n16_19.n = this.changeByAge.all().slice(16,20)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n16_19.n => ' + this.n16_19.n);                  
-                  
-                  this.n20_64.n = this.changeByAge.all().slice(20,65)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n20_64.n => ' + this.n20_64.n);
-                  
-                  this.n65_79.n = this.changeByAge.all().slice(65,80)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n65_79.n => ' + this.n65_79.n);                                               
+               var allAges = this.changeByAge.all();
 
-                  this.n80_100.n = this.changeByAge.all().slice(80,101)
-                    .map(function(d) { return d.value; })
-                    .reduce(function(a,b) { return a + b; });
-                  console.log('this.n80_100.n => ' + this.n80_100.n);
+                  this.n0 = sumInterval(allAges, 0, 0);
+                  this.n1_5 = sumInterval(allAges, 1, 5);
+                  this.n6_15 = sumInterval(allAges, 6, 15);
+                  this.n16_19 = sumInterval(allAges, 16, 19);
+                  this.n20_64 = sumInterval(allAges, 20, 64);
+                  this.n65_79 = sumInterval(allAges, 65, 79);
+                  this.n80_100 = sumInterval(allAges, 80, 100);
+                  this.nAll = sumInterval(allAges, 0, 100);
 
-/*
-                this.ageData = [this.n0, this.n1_5, this.n6_15, this.n16_19, this.n20_64, this.n65_79, this.n80_100]
-                                    .map(function(ageGroup) {
-                                        return { min: ageGroup.min, max: ageGroup.max, n: ageGroup.n, 
-                                                 key: (ageGroup.min == ageGroup.max) ? ageGroup.min.toString() : ageGroup.min.toString() + '-' + ageGroup.max.toString() };
-                                    });
-*/
-                                    
-                //console.table(this.ageData);
-
-                this.allAges.n = [this.n0.n, this.n1_5.n, this.n6_15.n, this.n16_19.n, this.n20_64.n, this.n65_79.n, this.n80_100.n]
-                                    .reduce(function(a,b) { return a + b; });
-                console.log('sum of all ages => ' + this.allAges.n);
-
+                //   console.log('this.n0 => ' + this.n0);
+                //   console.log('this.n1_5 => ' + this.n1_5);
+                //   console.log('this.n6_15 => ' + this.n6_15);
+                //   console.log('this.n16_19 => ' + this.n16_19);                  
+                //   console.log('this.n20_64 => ' + this.n20_64);
+                //   console.log('this.n65_79 => ' + this.n65_79);                                               
+                //   console.log('this.n80_100 => ' + this.n80_100);
+                //   console.log('this.nAll => ' + this.nAll);
+                // console.log('sum of all ages => ' + this.nAll);
 
 //-----//
 
 // PRODUCTIVITY
 // antal i yrkesverksam ålder 2014: 198463
 // räknar bara på förändringen
-this.nProductivePart = this.n20_64.n;
-this.dependencyRatio = Math.round((this.allAges.n / this.nProductivePart)*100)/100;
+this.nProductivePart = this.n20_64;
+this.dependencyRatio = Math.round((this.nAll / this.nProductivePart)*100)/100;
 this.shareProductivePart = 100 * 1/this.dependencyRatio;
 productivityTangle.setValues({  start: this.start, end: this.end,
                                 nProductivePart: this.nProductivePart,
@@ -688,24 +740,24 @@ productivityTangle.setValues({  start: this.start, end: this.end,
 
 // HOUSING
 housingTangle.setValues({ start: this.start, end: this.end, 
-                          nPeople: round50(this.allAges.n)
+                          nPeople: round50(this.nAll)
 });
 
 // PRESCHOOL
 preschoolTangle.setValues({ start: this.start, end: this.end, 
-                            nPreschoolChildren: round50(this.n1_5.n)
+                            nPreschoolChildren: round50(this.n1_5)
 });
 
 
 // PRIMARY SCHOOL
 primaryschoolTangle.setValues({ start: this.start, end: this.end, 
-                                nPrimaryschoolChildren: round50(this.n6_15.n)
+                                nPrimaryschoolChildren: round50(this.n6_15)
 });
 
 
 //------//
 
-this.yChart.update({ xmin: this.start, xmax: this.end });
+this.yearChart.update({ xmin: this.start, xmax: this.end });
 
 this.ageChart.update({ xmin: this.minAge, xmax: this.maxAge });
 
@@ -794,66 +846,6 @@ wc.appendChild(pw);
 
 
 
-
-   <div id='controls'>
-   
-         <h1 style="display:inline; margin-left:50px; font-family: MyriadPro-Bold, Garamond, Arial, Helvetica, sans-serif">Nya malmöbor 2015-2040</h1>
-        <p id="">
-            Under 
-                <span data-var="start" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
-                - 
-                <span data-var="end" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
-                (en 
-                <span data-var="nYears"></span>-årsperiod)
-                väntas 
-                <span id='group'>invånarantalet</span> 
-                <span id='increase' class='TKIf' data-var='increase'>öka</span> 
-                <span id='decrease' class='TKIf' data-var='decrease'>minska</span> 
-                med <span data-var='change'></span> individer i åldrarna 
-                <span data-var='minAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span> till 
-                <span data-var='maxAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span>. 
-        </p>
-
-
-         <p id="sections" data-var="sectionVisible" class="selector TKSwitchActive">
-         <span id="demography" class="selectorItem show"> De demografiska förändringarna </span> påverkar 
-                <span id="preschool" class="selectorItem hide"> Förskola </span>
-                <span id="primaryschool" class="selectorItem hide"> Grundskola </span>
-                <span id="uppersecondary" class="selectorItem hide"> Gymnasieskola </span>
-                <span id="housing" class="selectorItem hide"> Bostäder </span>
-                <span id="care" class="selectorItem hide"> Vård och omsorg </span>
-                <span id="productivity" class="selectorItem hide"> Skattekraft </span>
-                <span id="business" class="selectorItem hide"> Näringsliv </span>
-                <span id="infrastructure" class="selectorItem hide"> Infrastruktur </span>
-                <span id="regional" class="selectorItem hide"> Regionen </span>
-         </p>
-
-         <p id="ages" data-var="ageVisible" class="selector TKSwitchActive">
-                <span id="totalt" class="selectorItem hide"> totalt </span>
-                || 
-                <span id="totalt" class="selectorItem hide"> 0 </span>
-                <span id="totalt" class="selectorItem hide"> 1-5 </span>
-                <span id="totalt" class="selectorItem hide"> 6-15 </span>
-                <span id="totalt" class="selectorItem hide"> 16-19 </span>
-                <span id="totalt" class="selectorItem hide"> 20-64 </span>
-                <span id="totalt" class="selectorItem hide"> 65-79 </span>
-                <span id="totalt" class="selectorItem hide"> 80+ </span>
-         </p>
-
-         
-                    <svg id="yearChart">
-                    </svg>
-
-      </div> <!-- tangle end -->
-
-
-         <div id="widgetContainer">
-
-                    <svg id="ageChart"></svg>
-
-                    <!-- <svg id="svg"></svg> -->
-                    
-    </div> 
 
 
 
