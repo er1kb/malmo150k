@@ -288,22 +288,135 @@ var house = d3.select('#svg').selectAll('polygon')
     <div id="inactive">
 
     <!-- Productivity -->
-    <p id="productivityWidget" class="widget">
-         <span data-var="nProductivePart"></span> fler i åldrarna 20-64 innebär att 
-         <span data-var="shareProductivePart" data-format="%.1f">%</span> av de nya malmöborna 
-         <span data-var='start'></span> - <span data-var='end'></span> är i yrkesverksam ålder. 
+    <div id="productivityWidget" class="widget">
+      <p>
+         <span data-var="npp"></span> fler i åldrarna 20-64 fram till  
+         <span data-var='end'></span> innebär att 
+         <span data-var="nps_" data-format="%.1f">%</span> av de nya malmöborna är i yrkesverksam ålder. 
          Om vi räknar på de nya malmöborna utan att ta hänsyn till befintlig befolkning så är försörjningskvoten 
-         <span data-var="dependencyRatio"></span>. Detta är det antal personer varje 
+         <span data-var="ndr" data-format="%.2f"></span>. Detta är det antal personer varje 
         individ i yrkesverksam ålder måste försörja, inklusive sig själv. Att en relativt stor del 
-        av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot 
-        (1,60) väntas öka till 1,66 år 2025 och ... år 2040. Det ställer krav på sysselsättningen och ökar  
-        vikten av att den som kan jobba också ges möjlighet att göra det. 
-    </p>
+        av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot på 1.6 väntas öka till  
+        <span data-var='fdr' data-format="%.2f"></span>, enbart baserat på befolkningens åldersfördelning.  
+      </p>
+
+      <p>
+        <table cellspacing='0' border='1'>
+           <tr> 
+              <th></th>
+              <th>Befolkning 2014</th>
+              <th>Tillskott 2015-<span data-var='end'></span> </th>
+              <th>Framtida befolkning</th>
+           </tr>
+           <tr>
+              <td>0-100 år</td>
+              <td> <span data-var='cp'></span> </td>
+              <td> <span data-var='np'></span> </td>
+              <td> <span data-var='fp'></span> </td>
+           </tr>
+           <tr> 
+              <td>20-64 år</td>
+              <td> <span data-var='cpp'></span> </td>
+              <td> <span data-var='npp'></span> </td>
+              <td> <span data-var='fpp'></span> </td>
+           </tr>
+           <tr> 
+              <td>Andel 20-64 år</td>
+              <td> <span data-var='cps_' data-format="%.1f">%</span> </td>
+              <td> <span data-var='nps_' data-format="%.1f">%</span> </td>
+              <td> <span data-var='fps_' data-format="%.1f">%</span> </td>
+           </tr>
+           <tr> 
+              <td>Försörjningskvot</td>
+              <td> <span data-var='cdr' data-format="%.2f"></span>* </td>
+              <td> <span data-var='ndr' data-format="%.2f"></span> </td>
+              <td> <span data-var='fdr' data-format="%.2f"></span> </td>
+           </tr>
+           <tr> 
+              <td>Andel av framtida<br> befolkning (vikt)</td>
+              <td> <span data-var='cw_' data-format="%.0f">%</span> </td>
+              <td> <span data-var='nw_' data-format="%.0f">%</span> </td>
+              <td> 100% </td>
+           </tr>
+        </table>
+      <small> *TODO: jfr Stockholm, Göteborg, Riket. </small>
+      </p>
+
+      <p> 
+      Försörjningskvoten är betydligt högre bland de nya Malmöborna och framförallt under de närmaste 10 åren. 
+      </p>
+
+      <p>
+      Andelen i yrkesaktiv ålder är ett trubbigt mått, på så sätt att alla som kan lönearbeta också antas göra det. 
+      När vi justerar för sysselsättningsgrad blir den faktiska försörjningsbörjan betydligt högre. För närvarande är  
+      <span data-var='cer'>%</span> av alla 
+      malmöbor sysselsatta (2013). Om vi räknar med att sysselsättningsgraden bland de nya invånarna förändras med 
+      <span data-var='employmentRateChange' class='TKAdjustableNumber' data-min='-15' data-max='15'>%</span>  
+      (=<span data-var='ner'>%</span>) kommer den justerade försörjningsbördan att vara  
+      <span data-var='fadr' data-format='%.2f'></span>, att jämföra med dagens <span data-var='cadr' data-format='%.2f'></span>.
+      </p>
+
+      <p>
+        <table cellspacing='0' border='1'>
+           <tr> 
+              <th></th>
+              <th>Befolkning 2014</th>
+              <th>Tillväxt 2015-<span data-var='end'></span> </th>
+              <th>Framtida befolkning</th>
+           </tr>
+           <tr>
+              <td>0-100 år</td>
+              <td> <span data-var='cp'></span> </td>
+              <td> <span data-var='np'></span> </td>
+              <td> <span data-var='fp'></span> </td>
+           </tr>
+           <tr> 
+              <td>20-64 år och<br>förvärvsarbetande</td>
+              <td> <span data-var='capp'></span> </td>
+              <td> <span data-var='napp'></span> </td>
+              <td> <span data-var='fapp'></span> </td>
+           </tr>
+           <!-- <tr>  -->
+           <!--    <td>Andel 20&#45;64 år</td> -->
+           <!--    <td> <span data&#45;var='cps_' data&#45;format="%.1f">%</span> </td> -->
+           <!--    <td> <span data&#45;var='nps_' data&#45;format="%.1f">%</span> </td> -->
+           <!--    <td> <span data&#45;var='fps_' data&#45;format="%.1f">%</span> </td> -->
+           <!-- </tr> -->
+           <tr> 
+              <td>Justerad andel<br><span data-var='ner'>%</span> sysselsättning</td>
+              <td> <span data-var='caps_' data-format="%.1f">%</span> </td>
+              <td> <span data-var='naps_' data-format="%.1f">%</span> </td>
+              <td> <span data-var='faps_' data-format="%.1f">%</span> </td>
+           </tr>
+           <tr> 
+              <td>Justerad<br>försörjningskvot</td>
+              <td> <span data-var='cadr' data-format="%.2f"></span>* </td>
+              <td> <span data-var='nadr' data-format="%.2f"></span> </td>
+              <td> <span data-var='fadr' data-format="%.2f"></span> </td>
+           </tr>
+           <!-- <tr>  -->
+           <!--    <td>Andel av framtida<br> befolkning</td> -->
+           <!--    <td> <span data&#45;var='cw_' data&#45;format="%.0f">%</span> </td> -->
+           <!--    <td> <span data&#45;var='nw_' data&#45;format="%.0f">%</span> </td> -->
+           <!--    <td> 100% </td> -->
+           <!-- </tr> -->
+        </table>
+        <small> *TODO: jfr Stockholm, Göteborg, Riket. </small>
+        <br /> <br />
+      TODO2: Orsaksvariabler när det gäller sysselsättningsgrad. 
+     <br />
+      TODO3: Diagram som visar andelar i och inom befintlig resp. ny befolkning 
+      <br />
+      TODO4: Källhänvisningar och vidare information. Kontaktperson? 
+      </p>
+
+
+    </div>
     <!-- /Productivity -->
 
 
     <!-- Housing -->
-    <p id="housingWidget" class="widget">
+    <div id="housingWidget" class="widget">
          <span data-var="nPeople"></span> nya invånare kräver 
          <span data-var='appartments'> lägenheter om antalet boende per lägenhet är </span> 
          <span data-var='peoplePerAppartment' class="TKAdjustableNumber" data-min="2" data-max="10"> personer.</span> (boendetäthet 2014=?) 
@@ -314,25 +427,25 @@ var house = d3.select('#svg').selectAll('polygon')
          <span id='plus' class='TKIf' data-var='plus'>+</span><span data-var='appartmentsPerYearChange' id='appartmentsPerYearChange'></span> lägenheter/år. 
          Detta tar dock inte hänsyn till befintlig befolkning och det underskott som redan finns. 
          <!-- Varje hus i diagrammet nedan representerar 1000 lägenheter. --> 
-    </p>
+    </div>
     <!-- /Housing -->
 
 
     <!-- Preschool -->
-    <p id="preschoolWidget" class="widget">
+    <div id="preschoolWidget" class="widget">
          <span data-var="nPreschoolChildren"></span> nya 1-5åringar motsvarar 
          <span data-var='nPreschools'> förskolor om varje enhet rymmer </span> 
          <span data-var='childrenPerPreschool' class="TKAdjustableNumber" data-min="20" data-max="60"> barn.</span><br>
          <span id="preschoolBar" class="indicatorBar"></span>
-    </p>
+    </div>
     <!-- /Preschool -->
 
     <!-- Primary school -->
-    <p id="primaryschoolWidget" class="widget">
+    <div id="primaryschoolWidget" class="widget">
          <span data-var="nPrimaryschoolChildren"></span> nya 6-15åringar skapar ett behov av 
          <span data-var='nPrimaryschools'> nya grundskolor om varje enhet rymmer </span>
          <span data-var='childrenPerPrimaryschool' class="TKAdjustableNumber" data-min="300" data-max="1000" data-step="100"> barn.</span>
-    </p>
+    </div>
     <!-- /Primary school -->
 
 
@@ -341,8 +454,12 @@ var house = d3.select('#svg').selectAll('polygon')
     <div id="demographyWidget" class="widget">
                     <svg id="ageChart"></svg>
                     <span style="left:150px; width:650px; position:absolute;">
-                        DEMOGRAPHY WIDGET
-                        <span data-var='lol' class="TKAdjustableNumber" data-min="1" data-max="10" data-step="2">lol</span>
+                        De demografiska förändringarna...
+                        <p> 
+                           <span data-var='a' class="TKAdjustableNumber" data-min="1" data-max="10" data-step="2"></span> +
+                           <span data-var='b' class="TKAdjustableNumber" data-min="1" data-max="10" data-step="2"></span> =
+                           <span data-var='c'></span>
+                        </p>
                     </span>
                     <br />
 
@@ -389,23 +506,24 @@ var house = d3.select('#svg').selectAll('polygon')
    
          <h1 style="display:inline; margin-left:50px; font-family: MyriadPro-Bold, Garamond, Arial, Helvetica, sans-serif">Nya malmöbor 2015-2040</h1>
         <p id="">
-            Under 
-                <span data-var="start" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
-                - 
+
+                <span id='fromStart' class='TKIf' data-var='fromStart'>Fram till </span> 
+                <span id='notFromStart' class='TKIf' data-var='notFromStart'>
+                  Under <span data-var="start" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
+                  - </span> 
                 <span data-var="end" class="TKAdjustableNumber" data-min="2015" data-max="2040"></span>
-                (en 
-                <span data-var="nYears"></span>-årsperiod)
-                väntas 
-                <span id='group'>invånarantalet</span> 
+                (en <span data-var="nYears"></span>-årsperiod)
+                väntas <span id='group'>invånarantalet</span> 
                 <span id='increase' class='TKIf' data-var='increase'>öka</span> 
                 <span id='decrease' class='TKIf' data-var='decrease'>minska</span> 
                 med <span data-var='change'></span> individer i åldrarna 
-                <span data-var='minAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span> till 
+                <span data-var='minAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span> - 
                 <span data-var='maxAge' class="TKAdjustableNumber" data-min="0" data-max="100"></span>. 
+                Totalt tillkommer <span data-var='nAll'></span> nya malmöbor.
         </p>
 
 
-         <p id="sections" data-var="sectionVisible" class="selector TKSwitchActive">
+         <p id="sections" data-var="sectionVisible" class="selector TKSwitchActive" data-class1="show" data-class2="hide">
          <span id="demography" class="selectorItem show"> De demografiska förändringarna </span> påverkar 
                 <span id="preschool" class="selectorItem hide"> Förskola </span>
                 <span id="primaryschool" class="selectorItem hide"> Grundskola </span>
@@ -417,9 +535,8 @@ var house = d3.select('#svg').selectAll('polygon')
                 <span id="infrastructure" class="selectorItem hide"> Infrastruktur </span>
                 <span id="regional" class="selectorItem hide"> Regionen </span>
          </p>
-
          
-         <p id="ages" data-var="ageVisible" class="selector TKSwitchActive">
+         <p id="ages" data-var="ageVisible" class="selector TKSwitchActive" data-class1="show" data-class2="hide">
                 <span id="totalt" class="selectorItem hide"> totalt </span>
                 || 
                 <span id="totalt" class="selectorItem hide"> 0 </span>
@@ -429,9 +546,10 @@ var house = d3.select('#svg').selectAll('polygon')
                 <span id="totalt" class="selectorItem hide"> 20-64 </span>
                 <span id="totalt" class="selectorItem hide"> 65-79 </span>
                 <span id="totalt" class="selectorItem hide"> 80+ </span>
-
          </p>
+
                     <svg id="yearChart">
+                       <g id="gBrush" data-var="xExtent" class="TKBrush brush" data-min="2015" data-max="2040" data-x1="2015" data-x2="2019"></g>
                     </svg>
 
       </div> <!-- tangle end -->
@@ -450,17 +568,20 @@ var house = d3.select('#svg').selectAll('polygon')
 <script type='text/javascript'>
 
 
-var round5 = roundn(5);
-var round50 = roundn(50);
+// var round5 = roundn(5);
+// var round50 = roundn(50);
 
 var demographyTangle = new Tangle(document.getElementById('demographyWidget'), {
     initialize: function () { console.log('DEMOGRAPHY INITIALIZED...');
         
                               this.start = 2015;
                               this.end = 2040;
-                              this.lol = 5;
+                              this.a = 5;
+                              this.b = 5;
+                              this.round = roundn(5);
                             },
     update:     function () {  
+                           this.c = this.a + this.b;
        console.log('DEMOGRAPHY UPDATED...');
  }
 });
@@ -475,6 +596,7 @@ var preschoolTangle = new Tangle(document.getElementById('preschoolWidget'), {
                               this.nPreschoolChildren = 0;
                               this.childrenPerPreschool = 40;
                               this.shareProductivePart = 0;
+                              this.round = roundn(5);
                             },
     update:     function () { this.perCapita= 1/this.childrenPerPreschool;
                               this.nPreschools = Math.ceil(this.nPreschoolChildren * this.perCapita);
@@ -489,6 +611,7 @@ var primaryschoolTangle = new Tangle(document.getElementById('primaryschoolWidge
                               this.nPrimaryschoolChildren = 0;
                               this.childrenPerPrimaryschool = 500;
                               this.shareProductivePart = 0;
+                              this.round = roundn(5);
                             },
     update:     function () { this.perCapita = 1/this.childrenPerPrimaryschool;
                               this.nPrimaryschools = Math.ceil(this.nPrimaryschoolChildren * this.perCapita);
@@ -502,11 +625,58 @@ var productivityTangle = new Tangle(document.getElementById('productivityWidget'
         
                               this.start = 2015; 
                               this.end = 2040;
-                              this.nProductivePart = 0;
-                              this.dependencyRatio = 0;
-                              this.shareProductivePart = 0;
+                              this.cp = 318107;
+                              this.cpp = 198463;
+                              this.cps = this.cpp / this.cp;
+                              this.cps_ = this.cps * 100;
+                              this.cdr = 1 / this.cps;
+                              // this.nps = 0;
+                              // this.fps = 0;
+                              this.cw = 0;
+                              this.nAll = 0;
+                              this.np = 0;
+                              this.npp = 0;
+                              this.round = roundn(5);
+
+                              this.employmentRateChange = 0;
+                              this.cer = 64;
+                              this.capp = Math.round(this.cpp * (this.cer / 100));
+                              this.caps = this.capp / this.cp;
+                              this.caps_ = this.caps * 100;
+                              this.cadr = 1 / this.caps;
+                  // c = current, n = new, f = future (current + new)
+                  // p = population, pp = productive part, ps = productive part share of population, dr = dependency ratio
+                  // er = employment rate, w = weight, a = adjusted (multiplied by employment rate), _ = for display
                             },
-    update:     function () { console.log('PRODUCTIVITY UPDATED...');
+    update:     function () {  
+                              this.fp = this.cp + this.np;
+                              this.cw = this.cp / this.fp;
+                              this.cw_ = this.cw * 100;
+                              this.nw = 1 - this.cw;
+                              this.nw_ = this.nw * 100;
+
+                              this.nps = this.npp / this.np;
+                              this.nps_ = this.nps * 100;
+                              this.ndr = 1 / this.nps;
+                              this.ner = this.cer + this.employmentRateChange;
+
+                              this.napp = Math.round(this.npp * (this.ner / 100));
+                              this.naps = this.napp / this.np;
+                              this.naps_ = this.naps * 100;
+                              this.nadr = 1 / this.naps;
+
+                              this.fpp = this.cpp + this.npp;
+                              this.fps = this.fpp / this.fp;
+                              this.fps_ = this.fps * 100;
+                              this.fdr = 1 / this.fps;
+
+                              // adjusted figures, where changes in employment rate only applies to new population
+                              this.fapp = Math.round(this.capp + this.napp);
+                              this.faps = (this.cw * this.caps) + (this.nw * this.naps);
+                              this.faps_ = this.faps * 100;
+                              this.fadr = 1 / this.faps;
+
+            console.log('PRODUCTIVITY UPDATED...');
  }
 });
 
@@ -524,12 +694,14 @@ var housingTangle = new Tangle(document.getElementById('housingWidget'), {
                               this.plus = true;
                               this.appartmentsPerHouse = 1000;
                               this.maxHouses = 150;                 
+                              this.round = roundn(5);
                             },
     update:     function () { this.nYears = this.end - this.start + 1;
                               this.perCapita = 1/this.peoplePerAppartment;
                               this.appartments = Math.ceil(this.nPeople * this.perCapita);
-                              this.appartmentsPerYear = round5(this.appartments/this.nYears);
-                              this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;
+                              this.appartmentsPerYear = this.round(this.appartments/this.nYears);
+                              this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;  
+                                 // currently producing 1300 new appartments/year
                               this.plus = this.appartmentsPerYearChange >= 0;
                               document.getElementById('appartmentsPerYearChange').style.color = this.appartmentsPerYearChange >= 0 ? 'red' : 'green'; 
 
@@ -561,8 +733,10 @@ var rootElement = document.getElementById('controls');
 var model = {
 initialize: function() {
 
+
                   this.start = 2015;
                   this.end = 2019;
+                  this.xExtent = [this.start,this.end];
                   this.firstYear = 2015;
                   this.lastYear = 2040;
                   this.nYears = this.end - this.start + 1;
@@ -656,7 +830,7 @@ this.ageChart.render();
 
 //-----//
 
-this.sectionVisible = 0;
+this.sectionVisible = 6;
 // this.ageVisible = 0;
 
 //-----//
@@ -666,13 +840,24 @@ this.sectionVisible = 0;
             },
 update: function() {
 
+                  this.fromStart = (this.sectionVisible === 6);
+                  this.notFromStart = !this.fromStart;
+
                   this.start = this.end - this.start >= 0 ? this.start : this.end;
                   this.end = this.end - this.start >= 0 ? this.end : this.start;
+
+                  this.start =  this.fromStart ? this.firstYear : this.start;
+                  this.xExtent = [this.start, this.end];
 
                   this.minAge = this.maxAge - this.minAge >= 0 ? this.minAge : this.maxAge;
                   this.maxAge = this.maxAge - this.minAge >= 0 ? this.maxAge : this.minAge;
                   this.nYears = this.end - this.start + 1;
-                  this.yearFilter = [this.start, this.end + 1];
+
+
+                  console.log('this.sectionVisible >> ' + this.sectionVisible);
+                  this.yearFilter = [this.start,  
+                                     this.end + 1];
+                  // this.yearFilter = [this.start, this.end + 1];
                   this.ageFilter = [this.minAge, this.maxAge + 1];
                   
                   //---//
@@ -685,9 +870,9 @@ update: function() {
                   this.changeByAge = this.ageDimension.filterRange(this.ageFilter).group()
                                           .reduceSum(function(d) { return d.s; });
 
-                  this.change = round5(this.xf.groupAll()
+                  this.change = this.xf.groupAll()
                                             .reduceSum(function(d) { return d.s; })
-                                            .value());
+                                            .value();
 
                   this.increase = this.change >= 0;
                   this.decrease = !this.increase;
@@ -729,29 +914,30 @@ update: function() {
 // PRODUCTIVITY
 // antal i yrkesverksam ålder 2014: 198463
 // räknar bara på förändringen
-this.nProductivePart = this.n20_64;
-this.dependencyRatio = Math.round((this.nAll / this.nProductivePart)*100)/100;
-this.shareProductivePart = 100 * 1/this.dependencyRatio;
+// this.nProductivePart = this.n20_64;
+// this.dependencyRatio = Math.round((this.nAll / this.nProductivePart)*100)/100;
+// this.shareProductivePart = 100 * 1/this.dependencyRatio;
 productivityTangle.setValues({  start: this.start, end: this.end,
-                                nProductivePart: this.nProductivePart,
-                                dependencyRatio: this.dependencyRatio,
-                                shareProductivePart: this.shareProductivePart                                
+                                np: this.nAll, npp: this.n20_64
+                                // nProductivePart: this.nProductivePart,
+                                // dependencyRatio: this.dependencyRatio,
+                                // shareProductivePart: this.shareProductivePart                                
         });
 
 // HOUSING
 housingTangle.setValues({ start: this.start, end: this.end, 
-                          nPeople: round50(this.nAll)
+                          nPeople: this.nAll
 });
 
 // PRESCHOOL
 preschoolTangle.setValues({ start: this.start, end: this.end, 
-                            nPreschoolChildren: round50(this.n1_5)
+                            nPreschoolChildren: this.n1_5
 });
 
 
 // PRIMARY SCHOOL
 primaryschoolTangle.setValues({ start: this.start, end: this.end, 
-                                nPrimaryschoolChildren: round50(this.n6_15)
+                                nPrimaryschoolChildren: this.n6_15
 });
 
 
@@ -770,54 +956,50 @@ this.ageChart.update({ xmin: this.minAge, xmax: this.maxAge });
     
     var mainTangle = new Tangle(rootElement, model);
 
-
-
 //-----//
 
+    document.getElementById('gBrush').parentNode.appendChild(document.getElementById('gBrush'));
 
-        var brushScaleX = d3.scale.linear()
-                                .domain([2015, 2040])
-                                .range([0,800]);
+        // var brushScaleX = d3.scale.linear()
+        //                         .domain([2015, 2040])
+        //                         .range([0,800]);
 
-        var ordinalX = d3.scale.ordinal()
-                                .domain(range(2015,2040))
-                                .range([0,800]);                                
-                                
-        var brush = d3.svg.brush()
-            .x(brushScaleX)
-            .extent([2015, 2019])
-            .on("brush", function() { 
+        //                         
+        // var brush = d3.svg.brush()
+        //     .x(brushScaleX)
+        //     .extent([2015, 2019])
+        //     .on("brush", function() { 
 
-                console.log('brushed... extent => ' + brush.extent().map(function(n) { return Math.round(n); }));
-                var extent0 = brush.extent();
+        //         console.log('brushed... extent => ' + brush.extent().map(function(n) { return Math.round(n); }));
+        //         var extent0 = brush.extent();
 
-                mainTangle.setValue('start', Math.round(extent0[0]));
-                mainTangle.setValue('end', Math.round(extent0[1]));
-                
-            });                
-        
-        console.log('brush extent >> ' + brush.extent());
-                
-        var gBrush = d3.select('#yearChart')
-                        .append('g')
-                        .attr('id', 'gBrush')
-                        .attr('class', 'brush')
-                        .call(brush);
-
-        d3.select('#yearChart')
-            .on('mouseover', function() {
-                    gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'visible');
-                    gBrush.selectAll('.resize').selectAll('rect')
-                                        .attr({'width': 5, 'height': 80})
-                                        .style({'visibility': 'visible', 'fill': 'purple', 'fill-opacity': '0.3'});
-            })
-            .on('mouseout', function() {
-
-                    gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'hidden');
-                    gBrush.selectAll('.resize').selectAll('rect')
-                                        .attr({'width': 5, 'height': 80})
-                                        .style({'visibility': 'hidden', 'fill': 'purple', 'fill-opacity': '0.3'});
-            });
+        //         mainTangle.setValue('start', Math.round(extent0[0]));
+        //         mainTangle.setValue('end', Math.round(extent0[1]));
+        //         
+        //     });                
+        // 
+        // console.log('brush extent >> ' + brush.extent());
+        //         
+        // var gBrush = d3.select('#yearChart')
+        //                 .append('g')
+        //                 .attr('id', 'gBrush')
+        //                 .attr('class', 'brush')
+        //                 .call(brush);
+// 
+//         d3.select('#yearChart')
+//             .on('mouseover', function() {
+//                     gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'visible');
+//                     gBrush.selectAll('.resize').selectAll('rect')
+//                                         .attr({'width': 5, 'height': 80})
+//                                         .style({'visibility': 'visible', 'fill': 'purple', 'fill-opacity': '0.3'});
+//             })
+//             .on('mouseout', function() {
+// 
+//                     gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'hidden');
+//                     gBrush.selectAll('.resize').selectAll('rect')
+//                                         .attr({'width': 5, 'height': 80})
+//                                         .style({'visibility': 'hidden', 'fill': 'purple', 'fill-opacity': '0.3'});
+//             });
         
 
 //-----//

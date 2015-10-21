@@ -13,7 +13,7 @@ var range = function(from,to,step) {
                         var len = to - from + 1;
                         
                         return Array.apply(null, Array(len)).map(function (_, i) {return from+i;})
-                                    .filter(function(n,i) { return ((n - from) % step) == 0; } ); 
+                                    .filter(function(n,i) { return ((n - from) % step) === 0; } ); 
                                     };
                                     
 
@@ -249,20 +249,28 @@ return instance;
 Tangle.classes.TKSwitchActive = {
     initialize: function (element, options, tangle, variable) {
 
-        element.addEvent("click", function (event) {
+        element.addEvent("mousedown", function (event) {
             var child = event.target;
             var index = Array.prototype.indexOf.call(element.children, child);
             var previous = tangle.getValue(variable);            
             tangle.setValue(variable, index < 0 ? previous : index);  // if no child element was clicked, use previous index
-            console.log('section visible --> ' + (index < 0 ? previous : index));
-
+            // console.log('section visible --> ' + (index < 0 ? previous : index));
         });
+
+        this.class1 = options.class1;
+        this.class2 = options.class2;
     },
 
     update: function (element, value) {
+
+         class1 = this.class1;
+         class2 = this.class2;
+
         element.getChildren().each( function (child, index) {
-            child.classList.remove((index != value) ? "show" : "hide");
-            child.classList.add((index != value) ? "hide" : "show");
+            child.classList.remove((index != value) ? class1 : class2);
+            child.classList.add((index != value) ? class2 : class1);
+            // child.classList.remove((index != value) ? "show" : "hide");
+            // child.classList.add((index != value) ? "hide" : "show");
         });
     }
 };
@@ -273,3 +281,50 @@ Tangle.classes.TKSwitchActive = {
         
         
         
+/*
+    D3 brush as a TangleKit class. 
+*/
+
+Tangle.classes.TKBrush = {
+    initialize: function (element, options, tangle, variable) {
+
+        this.brushScaleX = d3.scale.linear()
+                                .domain([options.min, options.max])
+                                .range([0,800]);
+        
+        this.brush = d3.svg.brush()
+            .x(this.brushScaleX)
+            .extent([options.x1, options.x2]);
+        var that = this;
+
+        this.brush
+            .on("brush", function() { 
+
+                var extent0 = that.brush.extent();
+                var fromStart = tangle.getValue('fromStart');
+                var extent1 = extent0.map(function(d) { return Math.round(d); })
+
+                tangle.setValue('start', extent1[0]); 
+                tangle.setValue('end', extent1[1]);
+               tangle.setValue(variable, extent1);
+            });                
+            
+        this.gBrush = d3.select('#' + element.id);
+
+    },
+
+    update: function (element, value) {
+
+                        this.brush.extent(value);
+                        this.gBrush.call(this.brush);
+
+                    this.gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'visible');
+                    this.gBrush.selectAll('.resize').selectAll('rect')
+                                        .attr({'width': 5, 'height': 80})
+                                        .style({'visibility': 'visible', 'fill': 'purple', 'fill-opacity': '0.3'});
+                    
+        }
+    };
+
+
+
