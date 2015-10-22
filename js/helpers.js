@@ -249,7 +249,7 @@ return instance;
 Tangle.classes.TKSwitchActive = {
     initialize: function (element, options, tangle, variable) {
 
-        element.addEvent("mousedown", function (event) {
+        element.addEvent("click", function (event) {
             var child = event.target;
             var index = Array.prototype.indexOf.call(element.children, child);
             var previous = tangle.getValue(variable);            

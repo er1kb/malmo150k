@@ -15,6 +15,8 @@
 <script src='js/d3/d3.min.js'></script>
 <script src='js/crossfilter.min.js'></script>
 <script src='js/helpers.js'></script>
+<script src='js/charts.js'></script>
+
 <!-- <script src='js/dc.js-2.0.0-beta.19/dc.min.js'></script> -->
 
 
@@ -83,7 +85,7 @@
     position: relative;
     margin-top: 0px;
     width: 800px;
-    height: 600px;
+    /* height: 600px; */
     /* font-family: Serif, Georgia; */
     font-size: 22px;
 }
@@ -92,6 +94,44 @@
 /* .widget:hover { */
 /*     background-color: #e0e0e0; */
 /* } */
+
+.widgetTable { 
+   width: 600px;
+   border-spacing: 5px;
+   border: 0px solid grey;
+   border-collapse: collapse;
+   display: inline-block;
+   
+}
+
+.valueCell {
+   border: 0px;
+   text-align: right;
+   border-bottom: 1px dotted black;
+}
+
+.rowName {
+   font-weight: bold;
+   text-align: right;
+   border: 0px;
+   border-bottom: 1px dotted black;
+}
+
+
+.colName {
+   font-weight: bold;
+   text-align: right;
+   border: 2px;
+   border-bottom-style: solid;
+}
+
+.emptyCell {
+   border: 0px;
+}
+
+.asterisk {
+   font-style: italic;
+}
 
 indicatorBar {
     background-color: #b5b5b5;
@@ -192,10 +232,10 @@ indicatorBar {
 #widgetContainer {
     position: absolute;
     width: 800px;
-    height: 600px;  
+    /* height: 1600px;   */
     left: 300px;
     top: 550px;
-    background-color: khaki;
+    /* background-color: khaki; */
 }
 
 #inactive {
@@ -295,119 +335,131 @@ var house = d3.select('#svg').selectAll('polygon')
          <span data-var="nps_" data-format="%.1f">%</span> av de nya malmöborna är i yrkesverksam ålder. 
          Om vi räknar på de nya malmöborna utan att ta hänsyn till befintlig befolkning så är försörjningskvoten 
          <span data-var="ndr" data-format="%.2f"></span>. Detta är det antal personer varje 
-        individ i yrkesverksam ålder måste försörja, inklusive sig själv. Att en relativt stor del 
-        av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot på 1.6 väntas öka till  
-        <span data-var='fdr' data-format="%.2f"></span>, enbart baserat på befolkningens åldersfördelning.  
+        individ i yrkesverksam ålder måste försörja, inklusive sig själv. Försörjningskvoten är betydligt högre bland de nya Malmöborna och framförallt under de närmaste 10 åren. Därefter sker ett något större relativt tillskott i de yrkesaktiva åldrarna, men kvoten är fortfarande betydligt högre än i den befintliga befolkningen. Att en relativt stor del av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot på 1.6 väntas öka till <span data-var='fdr' data-format="%.2f"></span>, enbart baserat på befolkningens åldersfördelning.  
       </p>
 
       <p>
-        <table cellspacing='0' border='1'>
+        <table class="widgetTable" height='200' cellspacing='0' border='1'>
            <tr> 
-              <th></th>
-              <th>Befolkning 2014</th>
-              <th>Tillskott 2015-<span data-var='end'></span> </th>
-              <th>Framtida befolkning</th>
+              <th class="emptyCell"></th>
+              <th class="colName">Befolkning 2014</th>
+              <th class="colName">Tillskott 2015-<span data-var='end'></span> </th>
+              <th class="colName">Befolkning <span data-var='end'></span></th>
            </tr>
            <tr>
-              <td>0-100 år</td>
-              <td> <span data-var='cp'></span> </td>
-              <td> <span data-var='np'></span> </td>
-              <td> <span data-var='fp'></span> </td>
+              <td class="rowName">0-100 år</td>
+              <td class="valueCell"> <span data-var='cp'></span> </td>
+              <td class="valueCell"> <span data-var='np'></span> </td>
+              <td class="valueCell"> <span data-var='fp'></span> </td>
            </tr>
            <tr> 
-              <td>20-64 år</td>
-              <td> <span data-var='cpp'></span> </td>
-              <td> <span data-var='npp'></span> </td>
-              <td> <span data-var='fpp'></span> </td>
+              <td class="rowName">20-64 år</td>
+              <td class="valueCell"> <span data-var='cpp'></span> </td>
+              <td class="valueCell"> <span data-var='npp'></span> </td>
+              <td class="valueCell"> <span data-var='fpp'></span> </td>
            </tr>
            <tr> 
-              <td>Andel 20-64 år</td>
-              <td> <span data-var='cps_' data-format="%.1f">%</span> </td>
-              <td> <span data-var='nps_' data-format="%.1f">%</span> </td>
-              <td> <span data-var='fps_' data-format="%.1f">%</span> </td>
+              <td class="rowName">Andel 20-64 år</td>
+              <td class="valueCell"><span data-var='cps_' data-format="%.1f">%</span></td>
+              <td class="valueCell"><span data-var='nps_' data-format="%.1f">%</span></td>
+              <td class="valueCell"><span data-var='fps_' data-format="%.1f">%</span></td>
            </tr>
            <tr> 
-              <td>Försörjningskvot</td>
-              <td> <span data-var='cdr' data-format="%.2f"></span>* </td>
-              <td> <span data-var='ndr' data-format="%.2f"></span> </td>
-              <td> <span data-var='fdr' data-format="%.2f"></span> </td>
+              <td class="rowName">Försörjningskvot</td>
+              <td class="valueCell"> <span data-var='cdr' data-format="%.2f"></span>* </td>
+              <td class="valueCell"> <span data-var='ndr' data-format="%.2f"></span> </td>
+              <td class="valueCell"> <span data-var='fdr' data-format="%.2f"></span> </td>
            </tr>
            <tr> 
-              <td>Andel av framtida<br> befolkning (vikt)</td>
-              <td> <span data-var='cw_' data-format="%.0f">%</span> </td>
-              <td> <span data-var='nw_' data-format="%.0f">%</span> </td>
-              <td> 100% </td>
+              <td class="rowName">Vikt</td>
+              <td class="valueCell"> <span data-var='cw_' data-format="%.0f">%</span> </td>
+              <td class="valueCell"> <span data-var='nw_' data-format="%.0f">%</span> </td>
+              <td class="valueCell"> 100% </td>
            </tr>
         </table>
-      <small> *TODO: jfr Stockholm, Göteborg, Riket. </small>
-      </p>
 
-      <p> 
-      Försörjningskvoten är betydligt högre bland de nya Malmöborna och framförallt under de närmaste 10 åren. 
+
+        <br />
+      <small class="asterisk"> * jfr 2014: Stockholm 1.56, Göteborg 1.58, Sverige 1.73 </small>
       </p>
 
       <p>
       Andelen i yrkesaktiv ålder är ett trubbigt mått, på så sätt att alla som kan lönearbeta också antas göra det. 
-      När vi justerar för sysselsättningsgrad blir den faktiska försörjningsbörjan betydligt högre. För närvarande är  
-      <span data-var='cer'>%</span> av alla 
-      malmöbor sysselsatta (2013). Om vi räknar med att sysselsättningsgraden bland de nya invånarna förändras med 
-      <span data-var='employmentRateChange' class='TKAdjustableNumber' data-min='-15' data-max='15'>%</span>  
+      När vi justerar för sysselsättningsgrad blir den uppskattade försörjningsbördan betydligt högre. För närvarande är  
+      <span data-var='cer'>%</span> av alla malmöbor sysselsatta (2013). Om vi antar att sysselsättningsgraden bland de nya invånarna förändras med <span data-var='employmentRateChange' class='TKAdjustableNumber' data-min='-15' data-max='15'>%</span>  
       (=<span data-var='ner'>%</span>) kommer den justerade försörjningsbördan att vara  
       <span data-var='fadr' data-format='%.2f'></span>, att jämföra med dagens <span data-var='cadr' data-format='%.2f'></span>.
       </p>
 
       <p>
-        <table cellspacing='0' border='1'>
+        <table class="widgetTable" height='200' cellspacing='0' border='1'>
            <tr> 
-              <th></th>
-              <th>Befolkning 2014</th>
-              <th>Tillväxt 2015-<span data-var='end'></span> </th>
-              <th>Framtida befolkning</th>
+              <th class="emptyCell"></th>
+              <th class="colName">Befolkning 2014</th>
+              <th class="colName">Tillskott 2015-<span data-var='end'></span> </th>
+              <th class="colName">Befolkning <span data-var='end'></span></th>
            </tr>
            <tr>
-              <td>0-100 år</td>
-              <td> <span data-var='cp'></span> </td>
-              <td> <span data-var='np'></span> </td>
-              <td> <span data-var='fp'></span> </td>
+              <td class="rowName">0-100 år</td>
+              <td class="valueCell"> <span data-var='cp'></span> </td>
+              <td class="valueCell"> <span data-var='np'></span> </td>
+              <td class="valueCell"> <span data-var='fp'></span> </td>
            </tr>
            <tr> 
-              <td>20-64 år och<br>förvärvsarbetande</td>
-              <td> <span data-var='capp'></span> </td>
-              <td> <span data-var='napp'></span> </td>
-              <td> <span data-var='fapp'></span> </td>
-           </tr>
-           <!-- <tr>  -->
-           <!--    <td>Andel 20&#45;64 år</td> -->
-           <!--    <td> <span data&#45;var='cps_' data&#45;format="%.1f">%</span> </td> -->
-           <!--    <td> <span data&#45;var='nps_' data&#45;format="%.1f">%</span> </td> -->
-           <!--    <td> <span data&#45;var='fps_' data&#45;format="%.1f">%</span> </td> -->
-           <!-- </tr> -->
-           <tr> 
-              <td>Justerad andel<br><span data-var='ner'>%</span> sysselsättning</td>
-              <td> <span data-var='caps_' data-format="%.1f">%</span> </td>
-              <td> <span data-var='naps_' data-format="%.1f">%</span> </td>
-              <td> <span data-var='faps_' data-format="%.1f">%</span> </td>
+              <td class="rowName">20-64 år och<br>förvärvsarbetande</td>
+              <td class="valueCell"> <span data-var='capp'></span> </td>
+              <td class="valueCell"> <span data-var='napp'></span> </td>
+              <td class="valueCell"> <span data-var='fapp'></span> </td>
            </tr>
            <tr> 
-              <td>Justerad<br>försörjningskvot</td>
-              <td> <span data-var='cadr' data-format="%.2f"></span>* </td>
-              <td> <span data-var='nadr' data-format="%.2f"></span> </td>
-              <td> <span data-var='fadr' data-format="%.2f"></span> </td>
+              <td class="rowName"> Sysselsättningsgrad </td>
+              <td class="valueCell"><span data-var='cer' data-format="%.1f">%</span></td>
+              <td class="valueCell"><span data-var='ner' data-format="%.1f">%</span></td>
+              <td class="valueCell"><span data-var='fer' data-format="%.1f">%</span></td>
            </tr>
-           <!-- <tr>  -->
-           <!--    <td>Andel av framtida<br> befolkning</td> -->
-           <!--    <td> <span data&#45;var='cw_' data&#45;format="%.0f">%</span> </td> -->
-           <!--    <td> <span data&#45;var='nw_' data&#45;format="%.0f">%</span> </td> -->
-           <!--    <td> 100% </td> -->
-           <!-- </tr> -->
+           <tr> 
+              <td class="rowName">Justerad andel </td>
+              <td class="valueCell"><span data-var='caps_' data-format="%.1f">%</span></td>
+              <td class="valueCell"><span data-var='naps_' data-format="%.1f">%</span></td>
+              <td class="valueCell"><span data-var='faps_' data-format="%.1f">%</span></td>
+           </tr>
+           <tr> 
+              <td class="rowName">Justerad kvot</td>
+              <td class="valueCell"> <span data-var='cadr' data-format="%.2f"></span>* </td>
+              <td class="valueCell"> <span data-var='nadr' data-format="%.2f"></span> </td>
+              <td class="valueCell"> <span data-var='fadr' data-format="%.2f"></span> </td>
+           </tr>
         </table>
-        <small> *TODO: jfr Stockholm, Göteborg, Riket. </small>
+
+
+        <br />
+        <small class="asterisk"> * jfr 2013: Stockholm ., Göteborg ., Sverige . </small>
+        <!-- Sysselsättningsgrad 2013: -->
+        <!-- Stockholm 77,82 %, Malmö 64,03 %, Göteborg: 72,95 % -->
+        <!-- Relatera till befolkning 2013 -->
         <br /> <br />
-      TODO2: Orsaksvariabler när det gäller sysselsättningsgrad. 
-     <br />
-      TODO3: Diagram som visar andelar i och inom befintlig resp. ny befolkning 
-      <br />
-      TODO4: Källhänvisningar och vidare information. Kontaktperson? 
+
+        <p> 
+        Den stora skillnaden mellan de två räknesätten understryker sysselsättningens vikt för att uppskatta den faktiska försörjningsbördan. Befolkningsprognosen säger något om antal individer i respektive ålder vid ett givet årsskifte, men andra slutsatser om befolkningens sammansättning kräver sekundära uppgifter och antaganden. Män lönearbetar i något högre utsträckning än kvinnor (61% resp. 56%)* och skillnaderna är stora mellan åldersgrupper, där 20-24åringar lönearbetar minst och 45-54åringar mest (58% resp. 84%).  
+        </p>
+
+        <p>
+        Som enskild variabel är också geografiskt ursprung mycket utslagsgivande. Bland sverigefödda är förvärvsfrekvensen högst med 82% medan den bland de med afrikanskt födelseland är ungefär hälften, 45%. Den här typen av ojämlikheter beror i sin tur på hur arbetsmarknaden fungerar i relation till sociala och individuella förutsättningar**. I bred bemärkelse talar vi om dessa resurser som socialt, kulturellt och ekonomiskt kapital***. 
+        </p>
+
+        <p>
+        Självklart är det också så att både kön, ålder och etnicitet får sin förklaringskraft av att de samvarierar med andra faktorer. Att invandringen ur olika grupper har varierat över tid påverkar till viss del skillnaderna mellan arbetstagare av olika etnicitet. Högst är förvärvsfrekvensen bland dem som invandrade på 80- och 90-talen (cirka 65%), något lägre för nytillkomna på 2000-2009 (knappt 56%) och lägst bland dem som invandrat sedan 2010 (37%). 
+         
+      <p>
+      <small class="asterisk"> * Dessa och efterföljande andelar gäller riket som helhet 2013, men mönstren går igen på lokal nivå. Alla siffror finns att hämta i <a href="http://www.statistikdatabasen.scb.se/pxweb/sv/ssd/START__AM__AM0207__AM0207H/?rxid=3008aa41-85eb-400b-aa88-6797c8700809">SCB:s öppna statistikdatabas</a>.  </small><br>
+        <small class="asterisk"> ** För en historisk och teoretisk genomgång av samhällets ekonomiska omdaning och hur den påverkat förutsättningarna för integration, se t ex <a href="https://www.google.se/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CCAQFjAAahUKEwjUy_HA3dXIAhVHhywKHZzZAk8&url=http%3A%2F%2Fmalmo.se%2Fdownload%2F18.6e1be7ef13514d6cfcc80006006%2Fstigendal_20120130.pdf&usg=AFQjCNHtUj7uuGDw8ZrkrX1vWvIQshwTPA&sig2=XnpAMBRsKRH45x1JkRfGJw">Stigendal (2012), De två kunskapsstäderna</a> (diskussionsunderlag för Malmökommissionen). </small><br>
+        <small class="asterisk"> *** Tanken om olika kapitalformer härstammar från den franske sociologen Pierre Bourdieu. Socialt kapital kan till exempel vara tillgång till arbetsförmedlande kontaktnät. Med kulturellt kapital menas sådant som utbildningsmeriter (formella och informella) och språkkunskaper. I linje med kapitalliknelsen kan vi tala om växling och växlingskostnader. Om du till exempel får jobb genom en bekant ger det bland annat praktiska erfarenheter och formella meriter. I och med detta växlas ett socialt kapital till ett kulturellt och blir en plattform för den fortsatta karriären (kapitalet förräntas). Omvänt kan bristen på en viss typ av kapital kräva större investeringar av ett annat. Tillgången på relevant kapital är till stor del en funktion av ens sociala tillhörighet. Centralt i Bourdieus resonemang är också tanken om "misskännandet": att de framgångar och misslyckanden som är ett resultat av ojämlikheter istället tillskrivs individen, vilket leder till att vi strävar efter olika saker. De individuella livsprocesserna ger på så vis en självselektion till exempelvis positioner i arbetslivet, vilket reproducerar ojämlikheten. Det här resonemanget förändrar inte statistiken men är viktigt att hålla i åtanke när vi diskuterar ojämlikhet, för att bredda diskussionen kring utbud och efterfrågan med en social dimension. Stigendal (se ovan) diskuterar bland annat hur samhällets och arbetslivets förändring under det senaste halvseklet har förändrat vilken typ av kompetens som är gångbar på arbetsmarknaden. </small><br>
+      </p>     
+
+      <p>
+      Vidare information:
+      <li> <a href="http://malmo.se/download/18.51821d07143bab87ba74e7b/1391423903290/Arbetsl%C3%B6shet+och+syssels%C3%A4ttning+i+Malm%C3%B6+2013.pdf">Arbetslöshet och sysselsättning i Malmö 2013 - en översikt</a> </li>
+      <li> <a href="http://malmo.se/download/18.527439081213a05d5d0800010970/INSIKT+tillv%C3%A4xt++och+skattekraft.pdf">Stadskontorets vårrapport 2009: Tema Tillväxt och Skattekraft</a> </li>
       </p>
 
 
@@ -417,16 +469,20 @@ var house = d3.select('#svg').selectAll('polygon')
 
     <!-- Housing -->
     <div id="housingWidget" class="widget">
+       <p>
          <span data-var="nPeople"></span> nya invånare kräver 
          <span data-var='appartments'> lägenheter om antalet boende per lägenhet är </span> 
          <span data-var='peoplePerAppartment' class="TKAdjustableNumber" data-min="2" data-max="10"> personer.</span> (boendetäthet 2014=?) 
          Fördelat på <span data-var='nYears'> år</span> motsvarar det en byggtakt på cirka 
          <span data-var='appartmentsPerYear'></span> lägenheter/år som ska vara inflyttningsklara från och med 
          <span data-var='start'></span>. Under de senaste 10 åren har det i snitt byggstartats nära 1300 bostäder i Malmö. 
+       </p>
+       <p>
          En boendetäthet på <span data-var='peoplePerAppartment'> personer/lägenhet</span> innebär att byggtakten behöver förändras med 
          <span id='plus' class='TKIf' data-var='plus'>+</span><span data-var='appartmentsPerYearChange' id='appartmentsPerYearChange'></span> lägenheter/år. 
          Detta tar dock inte hänsyn till befintlig befolkning och det underskott som redan finns. 
          <!-- Varje hus i diagrammet nedan representerar 1000 lägenheter. --> 
+       </p>
     </div>
     <!-- /Housing -->
 
@@ -456,9 +512,41 @@ var house = d3.select('#svg').selectAll('polygon')
                     <span style="left:150px; width:650px; position:absolute;">
                         De demografiska förändringarna...
                         <p> 
-                           <span data-var='a' class="TKAdjustableNumber" data-min="1" data-max="10" data-step="2"></span> +
-                           <span data-var='b' class="TKAdjustableNumber" data-min="1" data-max="10" data-step="2"></span> =
-                           <span data-var='c'></span>
+
+                        <table class='widgetTable' cellspacing='0'>
+                           <th class='colName'>Åldersgrupp</td>
+                           <th class='colName'>Förändring <span data-var='start'></span>-<span data-var='end'></span></td>
+                           </th>
+                        <tr>
+                           <td class='rowName'>0</td>
+                           <td class='valueCell'><span data-var='n0'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>1-5</td>
+                           <td class='valueCell'><span data-var='n1_5'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>6-15</td>
+                           <td class='valueCell'><span data-var='n6_15'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>16-19</td>
+                           <td class='valueCell'><span data-var='n16_19'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>20-64</td>
+                           <td class='valueCell'><span data-var='n20_64'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>65-79</td>
+                           <td class='valueCell'><span data-var='n65_79'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>80-100</td>
+                           <td class='valueCell'><span data-var='n80_100'></span></td>
+                        </tr>
+                        </table>
+
                         </p>
                     </span>
                     <br />
@@ -468,33 +556,41 @@ var house = d3.select('#svg').selectAll('polygon')
     <!-- /Demography -->
 
     <!-- Upper secondary -->
-    <p id="uppersecondaryWidget" class="widget">
+    <div id="uppersecondaryWidget" class="widget">
       Gymnasieskolor
-    </p>
+    </div>
     <!-- /Upper secondary -->
 
     <!-- Care -->
-    <p id="careWidget" class="widget">
-      Vård och omsorg
-    </p>
+    <div id="careWidget" class="widget">
+       Vård och omsorg<br>
+            <span data-var='start'></span>-<span data-var='end'></span>:
+         <p>
+         <span data-var='n65_79'></span> i åldrarna 65-79<br>
+         <span data-var='n80_100'></span> i åldrarna 80+ 
+         </p>
+         <p>innebär att...</p>
+    </div>
     <!-- /Care -->
 
     <!-- Business -->
-    <p id="businessWidget" class="widget">
+    <div id="businessWidget" class="widget">
       Näringsliv
-    </p>
+    </div>
     <!-- /Business -->
 
     <!-- Infrastructure -->
-    <p id="infrastructureWidget" class="widget">
-      Infrastruktur
-    </p>
+    <div id="infrastructureWidget" class="widget">
+      Infrastruktur och förbindelser
+         <p>Höghastighetsjärnväg, Öresundsmetro, lokal kollektivtrafik...</p>
+    </div>
     <!-- /Infrastructure -->
 
     <!-- Regional -->
-    <p id="regionalWidget" class="widget">
+    <div id="regionalWidget" class="widget">
       Regionala prognoser
-    </p>
+      <p>Skåne, Köpenhamn och övriga Öresundsregionen</p>
+    </div>
     <!-- /Regional -->
 
 
@@ -576,9 +672,13 @@ var demographyTangle = new Tangle(document.getElementById('demographyWidget'), {
         
                               this.start = 2015;
                               this.end = 2040;
-                              this.a = 5;
-                              this.b = 5;
-                              this.round = roundn(5);
+                              this.n0 = 0;
+                              this.n1_5 = 0;
+                              this.n6_15 = 0;
+                              this.n16_19 = 0;
+                              this.n20_64 = 0;
+                              this.n65_79 = 0;
+                              this.n80_100 = 0;
                             },
     update:     function () {  
                            this.c = this.a + this.b;
@@ -595,7 +695,6 @@ var preschoolTangle = new Tangle(document.getElementById('preschoolWidget'), {
                               this.end = 2040;
                               this.nPreschoolChildren = 0;
                               this.childrenPerPreschool = 40;
-                              this.shareProductivePart = 0;
                               this.round = roundn(5);
                             },
     update:     function () { this.perCapita= 1/this.childrenPerPreschool;
@@ -610,7 +709,6 @@ var primaryschoolTangle = new Tangle(document.getElementById('primaryschoolWidge
                               this.end = 2040;
                               this.nPrimaryschoolChildren = 0;
                               this.childrenPerPrimaryschool = 500;
-                              this.shareProductivePart = 0;
                               this.round = roundn(5);
                             },
     update:     function () { this.perCapita = 1/this.childrenPerPrimaryschool;
@@ -619,6 +717,18 @@ var primaryschoolTangle = new Tangle(document.getElementById('primaryschoolWidge
 });
 
 
+var careTangle = new Tangle(document.getElementById('careWidget'), {
+    initialize: function () { console.log('CARE INITIALIZED...');
+        
+                              this.start = 2015; 
+                              this.end = 2040;
+                              this.n65_79 = 0;
+                              this.n80_100 = 0;
+                            },
+    update:     function () {  
+                              console.log('CARE UPDATED...');
+ }
+});
 
 var productivityTangle = new Tangle(document.getElementById('productivityWidget'), {
     initialize: function () { console.log('PRODUCTIVITY INITIALIZED...');
@@ -630,8 +740,6 @@ var productivityTangle = new Tangle(document.getElementById('productivityWidget'
                               this.cps = this.cpp / this.cp;
                               this.cps_ = this.cps * 100;
                               this.cdr = 1 / this.cps;
-                              // this.nps = 0;
-                              // this.fps = 0;
                               this.cw = 0;
                               this.nAll = 0;
                               this.np = 0;
@@ -647,6 +755,7 @@ var productivityTangle = new Tangle(document.getElementById('productivityWidget'
                   // c = current, n = new, f = future (current + new)
                   // p = population, pp = productive part, ps = productive part share of population, dr = dependency ratio
                   // er = employment rate, w = weight, a = adjusted (multiplied by employment rate), _ = for display
+
                             },
     update:     function () {  
                               this.fp = this.cp + this.np;
@@ -675,7 +784,7 @@ var productivityTangle = new Tangle(document.getElementById('productivityWidget'
                               this.faps = (this.cw * this.caps) + (this.nw * this.naps);
                               this.faps_ = this.faps * 100;
                               this.fadr = 1 / this.faps;
-
+                              this.fer = (this.cw * this.cer) + (this.nw * this.ner);
             console.log('PRODUCTIVITY UPDATED...');
  }
 });
@@ -830,7 +939,7 @@ this.ageChart.render();
 
 //-----//
 
-this.sectionVisible = 6;
+this.sectionVisible = 0;
 // this.ageVisible = 0;
 
 //-----//
@@ -899,47 +1008,55 @@ update: function() {
                   this.n80_100 = sumInterval(allAges, 80, 100);
                   this.nAll = sumInterval(allAges, 0, 100);
 
-                //   console.log('this.n0 => ' + this.n0);
-                //   console.log('this.n1_5 => ' + this.n1_5);
-                //   console.log('this.n6_15 => ' + this.n6_15);
-                //   console.log('this.n16_19 => ' + this.n16_19);                  
-                //   console.log('this.n20_64 => ' + this.n20_64);
-                //   console.log('this.n65_79 => ' + this.n65_79);                                               
-                //   console.log('this.n80_100 => ' + this.n80_100);
-                //   console.log('this.nAll => ' + this.nAll);
-                // console.log('sum of all ages => ' + this.nAll);
-
 //-----//
 
 // PRODUCTIVITY
-// antal i yrkesverksam ålder 2014: 198463
-// räknar bara på förändringen
-// this.nProductivePart = this.n20_64;
-// this.dependencyRatio = Math.round((this.nAll / this.nProductivePart)*100)/100;
-// this.shareProductivePart = 100 * 1/this.dependencyRatio;
+if(this.sectionVisible === 6) {
 productivityTangle.setValues({  start: this.start, end: this.end,
                                 np: this.nAll, npp: this.n20_64
-                                // nProductivePart: this.nProductivePart,
-                                // dependencyRatio: this.dependencyRatio,
-                                // shareProductivePart: this.shareProductivePart                                
-        });
+   });
+}
 
 // HOUSING
+if(this.sectionVisible === 4) {
 housingTangle.setValues({ start: this.start, end: this.end, 
                           nPeople: this.nAll
-});
+   });
+}
 
 // PRESCHOOL
+if(this.sectionVisible === 1) {
 preschoolTangle.setValues({ start: this.start, end: this.end, 
                             nPreschoolChildren: this.n1_5
-});
+   });
+}
 
 
 // PRIMARY SCHOOL
+if(this.sectionVisible === 2) {
 primaryschoolTangle.setValues({ start: this.start, end: this.end, 
                                 nPrimaryschoolChildren: this.n6_15
-});
+   });
+}
 
+
+// CARE
+if(this.sectionVisible === 5) {
+careTangle.setValues({ start: this.start, end: this.end, 
+                       n65_79: this.n65_79, n80_100: this.n80_100  
+   });
+}
+
+
+// DEMOGRAPHY
+if(this.sectionVisible === 0) {
+demographyTangle.setValues({ start: this.start, end: this.end, 
+                             n0: this.n0, n1_5: this.n1_5, n6_15:  
+                             this.n6_15, n16_19: this.n16_19,  
+                             n20_64: this.n20_64, n65_79: this.n65_79,  
+                             n80_100: this.n80_100  
+   });
+}
 
 //------//
 
@@ -959,61 +1076,6 @@ this.ageChart.update({ xmin: this.minAge, xmax: this.maxAge });
 //-----//
 
     document.getElementById('gBrush').parentNode.appendChild(document.getElementById('gBrush'));
-
-        // var brushScaleX = d3.scale.linear()
-        //                         .domain([2015, 2040])
-        //                         .range([0,800]);
-
-        //                         
-        // var brush = d3.svg.brush()
-        //     .x(brushScaleX)
-        //     .extent([2015, 2019])
-        //     .on("brush", function() { 
-
-        //         console.log('brushed... extent => ' + brush.extent().map(function(n) { return Math.round(n); }));
-        //         var extent0 = brush.extent();
-
-        //         mainTangle.setValue('start', Math.round(extent0[0]));
-        //         mainTangle.setValue('end', Math.round(extent0[1]));
-        //         
-        //     });                
-        // 
-        // console.log('brush extent >> ' + brush.extent());
-        //         
-        // var gBrush = d3.select('#yearChart')
-        //                 .append('g')
-        //                 .attr('id', 'gBrush')
-        //                 .attr('class', 'brush')
-        //                 .call(brush);
-// 
-//         d3.select('#yearChart')
-//             .on('mouseover', function() {
-//                     gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'visible');
-//                     gBrush.selectAll('.resize').selectAll('rect')
-//                                         .attr({'width': 5, 'height': 80})
-//                                         .style({'visibility': 'visible', 'fill': 'purple', 'fill-opacity': '0.3'});
-//             })
-//             .on('mouseout', function() {
-// 
-//                     gBrush.selectAll('.extent').attr('height', 80).style('visibility', 'hidden');
-//                     gBrush.selectAll('.resize').selectAll('rect')
-//                                         .attr({'width': 5, 'height': 80})
-//                                         .style({'visibility': 'hidden', 'fill': 'purple', 'fill-opacity': '0.3'});
-//             });
-        
-
-//-----//
-
-
-/*
-
-wc = document.getElementById('widgetContainer');
-pw = document.getElementById('productivityWidget');
-wc.appendChild(pw);
-// document.getElementById('widgetContainer').children;
-// document.getElementById('inactive').appendChild(document.getElementById('preschoolWidget'));
-*/
-
 
                     return json;
                 })   // end of d3.json
