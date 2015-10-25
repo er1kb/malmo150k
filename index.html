@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -12,12 +13,9 @@
 <script src='js/Tangle-0.1.0/TangleKit/sprintf.js' type='text/javascript'></script>
 <script src='js/Tangle-0.1.0/TangleKit/BVTouchable.js' type='text/javascript'></script>
 <script src='js/Tangle-0.1.0/TangleKit/TangleKit.js' type='text/javascript'></script>
-<script src='js/d3/d3.min.js'></script>
+<script src='js/d3.min.js'></script>
 <script src='js/crossfilter.min.js'></script>
 <script src='js/helpers.js'></script>
-<script src='js/charts.js'></script>
-
-<!-- <script src='js/dc.js-2.0.0-beta.19/dc.min.js'></script> -->
 
 
 
@@ -330,12 +328,12 @@ var house = d3.select('#svg').selectAll('polygon')
     <!-- Productivity -->
     <div id="productivityWidget" class="widget">
       <p>
+         Ett mått på förmågan att finansiera det gemensamma är försörjningskvoten. Detta är det antal personer varje individ i yrkesverksam ålder måste försörja, inklusive sig själv. 
          <span data-var="npp"></span> fler i åldrarna 20-64 fram till  
          <span data-var='end'></span> innebär att 
          <span data-var="nps_" data-format="%.1f">%</span> av de nya malmöborna är i yrkesverksam ålder. 
          Om vi räknar på de nya malmöborna utan att ta hänsyn till befintlig befolkning så är försörjningskvoten 
-         <span data-var="ndr" data-format="%.2f"></span>. Detta är det antal personer varje 
-        individ i yrkesverksam ålder måste försörja, inklusive sig själv. Försörjningskvoten är betydligt högre bland de nya Malmöborna och framförallt under de närmaste 10 åren. Därefter sker ett något större relativt tillskott i de yrkesaktiva åldrarna, men kvoten är fortfarande betydligt högre än i den befintliga befolkningen. Att en relativt stor del av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot på 1.6 väntas öka till <span data-var='fdr' data-format="%.2f"></span>, enbart baserat på befolkningens åldersfördelning.  
+         <span data-var="ndr" data-format="%.2f"></span>. Försörjningskvoten är betydligt högre bland de nya Malmöborna och framförallt under de närmaste 10 åren. Därefter sker ett något större relativt tillskott i de yrkesaktiva åldrarna, men kvoten är fortfarande betydligt högre än i den befintliga befolkningen. Att en relativt stor del av tillväxten sker i de icke yrkesverksamma åldrarna innebär att dagens försörjningskvot på 1.6 väntas öka till <span data-var='fdr' data-format="%.2f"></span>, enbart baserat på befolkningens åldersfördelning. Nedan håller vi den nuvarande befolkningen konstant och simulerar vad som händer när befolkningstillväxten läggs till.  
       </p>
 
       <p>
@@ -444,16 +442,11 @@ var house = d3.select('#svg').selectAll('polygon')
         </p>
 
         <p>
-        Som enskild variabel är också geografiskt ursprung mycket utslagsgivande. Bland sverigefödda är förvärvsfrekvensen högst med 82% medan den bland de med afrikanskt födelseland är ungefär hälften, 45%. Den här typen av ojämlikheter beror i sin tur på hur arbetsmarknaden fungerar i relation till sociala och individuella förutsättningar**. I bred bemärkelse talar vi om dessa resurser som socialt, kulturellt och ekonomiskt kapital***. 
-        </p>
-
-        <p>
-        Självklart är det också så att både kön, ålder och etnicitet får sin förklaringskraft av att de samvarierar med andra faktorer. Att invandringen ur olika grupper har varierat över tid påverkar till viss del skillnaderna mellan arbetstagare av olika etnicitet. Högst är förvärvsfrekvensen bland dem som invandrade på 80- och 90-talen (cirka 65%), något lägre för nytillkomna på 2000-2009 (knappt 56%) och lägst bland dem som invandrat sedan 2010 (37%). 
+        Som enskild variabel är också geografiskt ursprung mycket utslagsgivande. Bland sverigefödda är förvärvsfrekvensen högst med 82% medan den bland de med afrikanskt födelseland är ungefär hälften, 45%. Självklart är det så att både kön, ålder och etnicitet får sin förklaringskraft av att de samvarierar med andra faktorer. Att invandringen ur olika grupper har skett av olika skäl och varierat över tid påverkar också skillnaderna mellan arbetstagare av olika etnicitet. Högst är förvärvsfrekvensen bland dem som invandrade på 80- och 90-talen (cirka 65%), något lägre för nytillkomna på 2000-2009 (knappt 56%) och lägst bland dem som invandrat sedan 2010 (37%). 
          
       <p>
       <small class="asterisk"> * Dessa och efterföljande andelar gäller riket som helhet 2013, men mönstren går igen på lokal nivå. Alla siffror finns att hämta i <a href="http://www.statistikdatabasen.scb.se/pxweb/sv/ssd/START__AM__AM0207__AM0207H/?rxid=3008aa41-85eb-400b-aa88-6797c8700809">SCB:s öppna statistikdatabas</a>.  </small><br>
         <small class="asterisk"> ** För en historisk och teoretisk genomgång av samhällets ekonomiska omdaning och hur den påverkat förutsättningarna för integration, se t ex <a href="https://www.google.se/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CCAQFjAAahUKEwjUy_HA3dXIAhVHhywKHZzZAk8&url=http%3A%2F%2Fmalmo.se%2Fdownload%2F18.6e1be7ef13514d6cfcc80006006%2Fstigendal_20120130.pdf&usg=AFQjCNHtUj7uuGDw8ZrkrX1vWvIQshwTPA&sig2=XnpAMBRsKRH45x1JkRfGJw">Stigendal (2012), De två kunskapsstäderna</a> (diskussionsunderlag för Malmökommissionen). </small><br>
-        <small class="asterisk"> *** Tanken om olika kapitalformer härstammar från den franske sociologen Pierre Bourdieu. Socialt kapital kan till exempel vara tillgång till arbetsförmedlande kontaktnät. Med kulturellt kapital menas sådant som utbildningsmeriter (formella och informella) och språkkunskaper. I linje med kapitalliknelsen kan vi tala om växling och växlingskostnader. Om du till exempel får jobb genom en bekant ger det bland annat praktiska erfarenheter och formella meriter. I och med detta växlas ett socialt kapital till ett kulturellt och blir en plattform för den fortsatta karriären (kapitalet förräntas). Omvänt kan bristen på en viss typ av kapital kräva större investeringar av ett annat. Tillgången på relevant kapital är till stor del en funktion av ens sociala tillhörighet. Centralt i Bourdieus resonemang är också tanken om "misskännandet": att de framgångar och misslyckanden som är ett resultat av ojämlikheter istället tillskrivs individen, vilket leder till att vi strävar efter olika saker. De individuella livsprocesserna ger på så vis en självselektion till exempelvis positioner i arbetslivet, vilket reproducerar ojämlikheten. Det här resonemanget förändrar inte statistiken men är viktigt att hålla i åtanke när vi diskuterar ojämlikhet, för att bredda diskussionen kring utbud och efterfrågan med en social dimension. Stigendal (se ovan) diskuterar bland annat hur samhällets och arbetslivets förändring under det senaste halvseklet har förändrat vilken typ av kompetens som är gångbar på arbetsmarknaden. </small><br>
       </p>     
 
       <p>
