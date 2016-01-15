@@ -62,11 +62,6 @@
     left: 150px;
     top: 500px;
     background-color: white;
-    
-//    background-image: url(bg.png);
-    background-position: left top;
-    background-size: 800px 560px;
-    background-repeat: no-repeat;    
 }
 
 
@@ -317,7 +312,7 @@ var house = d3.select('#svg').selectAll('polygon')
 </script>
 
    </head>
-  <!-- <body onload="setUpTangle()"> -->
+
   <body>
 
 
@@ -462,20 +457,169 @@ var house = d3.select('#svg').selectAll('polygon')
 
     <!-- Housing -->
     <div id="housingWidget" class="widget">
+
+       <p>I Boverkets rapport <i>Behov av bostadsbyggande</i> görs en prognos över det regionala bostadsbehovet under perioden 2015-2025. För att skatta detta behov använder Boverket den så kallade hushållskvotsmetoden, som utgår från befolkningstillväxt och åldersspecifika hushållskvoter. Grundläggande antaganden är för det första att varje hushåll behöver en bostad, för det andra att antalet hushåll beror av befolkningens ålderssammansättning. Hänsyn tas också till rivningar och lediga lägenheter. Därutöver behövs en så kallad bostadsreserv för att bostadsmarknadens ska fungera. Den är ett överskott som antas vara 1 % av befintligt bostadsbestånd. </p>
+
+
+                        <table class='widgetTable' cellspacing='0'>
+                           <th class='colName'>Åldersgrupp</td>
+                           <th class='colName'>Befolkningstillväxt</td>
+                           <th class='colName'>Hushållskvot</td>
+                           <th class='colName'>Hushåll/person (=1/kvot)</td>
+                           <th class='colName'>Bostadsbehov <span data-var='start'></span>-<span data-var='end'></span></td>
+                           </th>
+                        <tr>
+                           <td class='rowName'>15-19</td>
+                           <td class='valueCell'><span data-var='n15_19'></span></td>
+                           <td class='valueCell'><span data-var='hhr15_19'></span></td>
+                           <td class='valueCell'><span data-var='hh15_19' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh15_19'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>20-24</td>
+                           <td class='valueCell'><span data-var='n20_24'></span></td>
+                           <td class='valueCell'><span data-var='hhr20_24'></span></td>
+                           <td class='valueCell'><span data-var='hh20_24' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh20_24'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>25-34</td>
+                           <td class='valueCell'><span data-var='n25_34'></span></td>
+                           <td class='valueCell'><span data-var='hhr25_34'></span></td>
+                           <td class='valueCell'><span data-var='hh25_34' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh25_34'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>35-44</td>
+                           <td class='valueCell'><span data-var='n35_44'></span></td>
+                           <td class='valueCell'><span data-var='hhr35_44'></span></td>
+                           <td class='valueCell'><span data-var='hh35_44' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh35_44'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>45-54</td>
+                           <td class='valueCell'><span data-var='n45_54'></span></td>
+                           <td class='valueCell'><span data-var='hhr45_54'></span></td>
+                           <td class='valueCell'><span data-var='hh45_54' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh45_54'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>55-64</td>
+                           <td class='valueCell'><span data-var='n55_64'></span></td>
+                           <td class='valueCell'><span data-var='hhr55_64'></span></td>
+                           <td class='valueCell'><span data-var='hh55_64' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh55_64'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>65-69</td>
+                           <td class='valueCell'><span data-var='n65_69'></span></td>
+                           <td class='valueCell'><span data-var='hhr65_69'></span></td>
+                           <td class='valueCell'><span data-var='hh65_69' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh65_69'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>70-74</td>
+                           <td class='valueCell'><span data-var='n70_74'></span></td>
+                           <td class='valueCell'><span data-var='hhr70_74'></span></td>
+                           <td class='valueCell'><span data-var='hh70_74' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh70_74'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>75-79</td>
+                           <td class='valueCell'><span data-var='n75_79'></span></td>
+                           <td class='valueCell'><span data-var='hhr75_79'></span></td>
+                           <td class='valueCell'><span data-var='hh75_79' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh75_79'></span></td>
+                        </tr>
+                        <tr>
+                           <td class='rowName'>80-</td>
+                           <td class='valueCell'><span data-var='n80_100'></span></td>
+                           <td class='valueCell'><span data-var='hhr80_100'></span></td>
+                           <td class='valueCell'><span data-var='hh80_100' data-format='%.2f'></span></td>
+                           <td class='valueCell'><span data-var='nhh80_100'></span></td>
+                        </tr>
+
+                        <tr>
+                           <td class='rowName'>Summa</td>
+                           <td class='valueCell'><span data-var='nPeople'></span></td>
+                           <td class='valueCell'>-</td>
+                           <td class='valueCell'>-</td>
+                           <td class='valueCell'><span data-var='nhh'></span></td>
+                        </tr>
+                        </table>
+
+<br />
+<br />
+
+                        <table cellspacing='0' style='text-align:center;'>
+                           <tr>
+                              <td bgcolor="lightblue">Befolkningsförändring</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td>*</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="lightblue">Hushållskvoter</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td>=</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="#0099FF">Hushållsförändring</td>
+                              <td><span data-var='nhh'></span></td>
+                           </tr>
+                           <tr>
+                              <td>+</td>
+                              <td>+</td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="lightgrey">Rivning av befintligt bestånd</td>
+                              <td><span data-var='demolitionPerYear' class='TKAdjustableNumber' data-min='0' data-max='500' data-step='50' data-format='%.3d'> lägenheter årligen</span> * <span data-var='nYears'> år</span> = <span data-var='demolition'></span></td>
+                           </tr>
+                           <tr>
+                              <td>-</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="lightgrey">Lediga lägenheter</td>
+                              <td><span data-var='availableHousing' class='TKAdjustableNumber' data-min='0' data-max='500' data-step='50'></td>
+                           </tr>
+                           <tr>
+                              <td>+</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="lightgrey">"Bostadsreserv", 1% av bef. bestånd**</td>
+                              <td><span data-var='housingResidual'></span></td>
+                           </tr>
+                           <tr>
+                              <td>=</td>
+                              <td></td>
+                           </tr>
+                           <tr>
+                              <td bgcolor="#0099FF"><strong>Förväntat byggbehov <span data-var='start'></span>-<span data-var='end'></strong></td>
+                              <td><strong><span data-var='housingNeed'></span></strong></td>
+                           </tr>
+                        </table>
+
+
+
        <p>
-         <span data-var="nPeople"></span> nya invånare kräver 
-         <span data-var='appartments'> lägenheter om antalet boende per lägenhet är </span> 
-         <span data-var='peoplePerAppartment' class="TKAdjustableNumber" data-min="2" data-max="10"> personer.</span> (boendetäthet 2014=?) 
-         Fördelat på <span data-var='nYears'> år</span> motsvarar det en byggtakt på cirka 
-         <span data-var='appartmentsPerYear'></span> lägenheter/år som ska vara inflyttningsklara från och med 
-         <span data-var='start'></span>. Under de senaste 10 åren har det i snitt byggstartats nära 1300 bostäder i Malmö. 
+         Det demografiskt drivna bostadsbehovet <span data-var='start'></span>-<span data-var='end'> beräknas till 
+         <span data-var='housingNeed' data-format='%.5d'></span> färdigställda lägenheter. 
+         Fördelat på <span data-var='nYears' data-format='%.2d'> år</span> motsvarar det en byggtakt på cirka 
+         <span data-var='housingNeedPerYear' data-format='%.4d'></span> lägenheter/år varav de första behöver vara inflyttningsklara från och med 1 januari <span data-var='start'></span>. Under de senaste 10 åren har det i snitt byggstartats nära 1300 bostäder i Malmö. Detta motsvarar det marknadsdrivna bostadsbyggandet. För att producera bostäder i takt med den förväntade befolkningstillväxten krävs ytterligare <span data-var='productionChange' data-format='%.4d'></span> lägenheter per år. Detta är utan hänsyn till befintlig befolkning och det underskott som redan finns.
        </p>
-       <p>
-         En boendetäthet på <span data-var='peoplePerAppartment'> personer/lägenhet</span> innebär att byggtakten behöver förändras med 
-         <span id='plus' class='TKIf' data-var='plus'>+</span><span data-var='appartmentsPerYearChange' id='appartmentsPerYearChange'></span> lägenheter/år. 
-         Detta tar dock inte hänsyn till befintlig befolkning och det underskott som redan finns. 
-         <!-- Varje hus i diagrammet nedan representerar 1000 lägenheter. --> 
-       </p>
+      <p> 
+      <small class="asterisk"> * <a href="http://www.boverket.se/globalassets/publikationer/dokument/2015/behov-av-bostadsbyggande.pdf">Behov av bostadsbyggande, Boverket 2015</a>.</small><br>
+      <small class="asterisk"> ** Bostadsbestånd i Malmö 2014 enligt SCB: 154 900, varav 26 500 småhus, 119 800 flerbostadshus, 5 600 specialbostäder och 3 000 övriga hus. <a href="http://www.statistikdatabasen.scb.se/pxweb/sv/ssd/START__BO__BO0104/BO0104T01/?rxid=5ecfc620-edb3-4025-99ee-fc27540bf27f">Tabell</a>.  </small><br>
+
+      </p>
+
     </div>
     <!-- /Housing -->
 
@@ -797,22 +941,70 @@ var housingTangle = new Tangle(document.getElementById('housingWidget'), {
                               this.appartmentsPerHouse = 1000;
                               this.maxHouses = 150;                 
                               this.round = roundn(5);
+
+                              this.demolitionPerYear = 50;
+                              this.currentProduction = 1300;
+                              this.totalHousing = 154900;
+                              this.housingResidual = this.totalHousing * 0.01;
+                              this.availableHousing = 150;
+
+                              this.n15_19 = this.n20_24 = this.n25_34 = this.n35_44 = 
+                              this.n45_54 = this.n55_64 = this.n65_69 = this.n70_74 = 
+                              this.n75_79 = this.n80_100 = 0;
+
+
+                  this.hhr15_19 = .02;  
+                  this.hhr20_24 = .45;
+                  this.hhr25_34 = .59;  
+                  this.hhr35_44 = .61;
+                  this.hhr45_54 = .68  
+                  this.hhr55_64 = .63;
+                  this.hhr65_69 = .61;  
+                  this.hhr70_74 = .66;
+                  this.hhr75_79 = .66;  
+                  this.hhr80_100 = .82;  
+
+                  this.hh15_19 = 1/.02;  
+                  this.hh20_24 = 1/.45;
+                  this.hh25_34 = 1/.59;  
+                  this.hh35_44 = 1/.61;
+                  this.hh45_54 = 1/.68  
+                  this.hh55_64 = 1/.63;
+                  this.hh65_69 = 1/.61;  
+                  this.hh70_74 = 1/.66;
+                  this.hh75_79 = 1/.66;  
+                  this.hh80_100 = 1/.82;  
                             },
     update:     function () { this.nYears = this.end - this.start + 1;
-                              this.perCapita = 1/this.peoplePerAppartment;
-                              this.appartments = Math.ceil(this.nPeople * this.perCapita);
-                              this.appartmentsPerYear = this.round(this.appartments/this.nYears);
-                              this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;  
-                                 // currently producing 1300 new appartments/year
-                              this.plus = this.appartmentsPerYearChange >= 0;
-                              document.getElementById('appartmentsPerYearChange').style.color = this.appartmentsPerYearChange >= 0 ? 'red' : 'green'; 
 
-    /*
-                              this.nHouses = Math.ceil(this.appartments / this.appartmentsPerHouse);  
-                              this.houseData = range(1,this.nHouses);
-                              console.log('this.houseData => ' + this.houseData); 
-                              update(this.houseData, this.maxHouses);
-    */                              
+                              // this.perCapita = 1/this.peoplePerAppartment;
+                              // this.appartments = Math.ceil(this.nPeople * this.perCapita);
+                              // this.appartmentsPerYear = this.round(this.appartments/this.nYears);
+                              // this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;  
+                              //    // currently producing 1300 new appartments/year
+                              // this.plus = this.appartmentsPerYearChange >= 0;
+                              // document.getElementById('appartmentsPerYearChange').style.color = this.appartmentsPerYearChange >= 0 ? 'red' : 'green'; 
+
+
+                  this.nhh15_19 = Math.round(this.n15_19 * this.hhr15_19);  
+                  this.nhh20_24 = Math.round(this.n20_24 * this.hhr20_24);
+                  this.nhh25_34 = Math.round(this.n25_34 * this.hhr25_34);  
+                  this.nhh35_44 = Math.round(this.n35_44 * this.hhr35_44);
+                  this.nhh45_54 = Math.round(this.n45_54 * this.hhr45_54);  
+                  this.nhh55_64 = Math.round(this.n55_64 * this.hhr55_64);
+                  this.nhh65_69 = Math.round(this.n65_69 * this.hhr65_69);  
+                  this.nhh70_74 = Math.round(this.n70_74 * this.hhr70_74);
+                  this.nhh75_79 = Math.round(this.n75_79 * this.hhr75_79);  
+                  this.nhh80_100 = Math.round(this.n80_100 * this.hhr80_100);
+
+                  this.nhh = this.nhh15_19 + this.nhh20_24 + this.nhh25_34 + this.nhh35_44 +
+                            this.nhh45_54 + this.nhh55_64 + this.nhh65_69 + this.nhh70_74 +
+                            this.nhh75_79 + this.nhh80_100;
+
+                  this.demolition = this.demolitionPerYear * this.nYears; 
+                  this.housingNeed = this.nhh + this.demolition - this.availableHousing + this.housingResidual; 
+                  this.housingNeedPerYear = this.housingNeed / this.nYears;
+                  this.productionChange = this.housingNeedPerYear - this.currentProduction;
 
  }
 });
@@ -932,7 +1124,7 @@ this.ageChart.render();
 
 //-----//
 
-this.sectionVisible = 0;
+this.sectionVisible = 4;
 // this.ageVisible = 0;
 
 //-----//
@@ -989,6 +1181,7 @@ update: function() {
 
 //-----//
 
+if(this.sectionVisible !== 4) {
 
                var allAges = this.changeByAge.all();
 
@@ -1000,20 +1193,44 @@ update: function() {
                   this.n65_79 = sumInterval(allAges, 65, 79);
                   this.n80_100 = sumInterval(allAges, 80, 100);
                   this.nAll = sumInterval(allAges, 0, 100);
+}
+else {
+
+               var allAges = this.changeByAge.all();
+                  this.n15_19 = sumInterval(allAges, 15, 19);
+                  this.n20_24 = sumInterval(allAges, 20, 24);
+                  this.n25_34 = sumInterval(allAges, 25, 34);
+                  this.n35_44 = sumInterval(allAges, 35, 44);
+                  this.n45_54 = sumInterval(allAges, 45, 54);
+                  this.n55_64 = sumInterval(allAges, 55, 64);
+                  this.n65_69 = sumInterval(allAges, 65, 69);
+                  this.n70_74 = sumInterval(allAges, 70, 74);
+                  this.n75_79 = sumInterval(allAges, 75, 79);
+                  this.n80_100 = sumInterval(allAges, 80, 100);
+                  this.nAll = sumInterval(allAges, 0, 100);
+ 
+}
 
 //-----//
+
+
+// HOUSING
+if(this.sectionVisible === 4) {
+housingTangle.setValues({ start: this.start, end: this.end, 
+                  n15_19: this.n15_19, n20_24: this.n20_24,
+                  n25_34: this.n25_34, n35_44: this.n35_44,
+                  n45_54: this.n45_54, n55_64: this.n55_64,
+                  n65_69: this.n65_69, n70_74: this.n70_74,
+                  n75_79: this.n75_79, n80_100: this.n80_100,
+                  nPeople: this.nAll
+   });
+}
+
 
 // PRODUCTIVITY
 if(this.sectionVisible === 6) {
 productivityTangle.setValues({  start: this.start, end: this.end,
                                 np: this.nAll, npp: this.n20_64
-   });
-}
-
-// HOUSING
-if(this.sectionVisible === 4) {
-housingTangle.setValues({ start: this.start, end: this.end, 
-                          nPeople: this.nAll
    });
 }
 
@@ -1047,7 +1264,7 @@ demographyTangle.setValues({ start: this.start, end: this.end,
                              n0: this.n0, n1_5: this.n1_5, n6_15:  
                              this.n6_15, n16_19: this.n16_19,  
                              n20_64: this.n20_64, n65_79: this.n65_79,  
-                             n80_100: this.n80_100  
+                             n80_100: this.n80_100
    });
 }
 
