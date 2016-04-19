@@ -1,4 +1,3 @@
-
  
 /* 
     Generates a range of numbers for use with axis labels etc.

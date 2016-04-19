@@ -21,21 +21,39 @@
 
 <style type='text/css'>
 
+.highlighted { 
+   border-bottom: 4px solid; 
+   border-bottom-color: #00b5e2;
+}
+
+body { 
+   background-color: white;
+   margin-top:0px;
+
+}
 
 #controls {
-    position: absolute;
+    position: fixed;
+    background-color: white;
     left: 300px;    
     width: 800px;
-    height: 400px;
+    height: 420px;
     font-size: 24px;
     text-align: left; 
     margin-left:0px;
     margin-right:0px;
-    margin-top:20px;
     margin-bottom:-20px;
-    font-size: 26px;    
+    font-size: 26px;   
+
+    border-bottom: thin solid black;
+ 
 }
 
+#summary { 
+   display: block;
+   margin-top:0px;
+
+}
 
 #timeline {
     position: absolute;
@@ -48,7 +66,7 @@
 
 #yearChart {
     position: absolute;
-    top: 400px;
+    top: 300px;
     height: 100px;
     width: 800px;
     left: 0px;    
@@ -227,8 +245,9 @@ indicatorBar {
     width: 800px;
     /* height: 1600px;   */
     left: 300px;
-    top: 550px;
+    top: 450px;
     /* background-color: khaki; */
+    z-index: -1;
 }
 
 #inactive {
@@ -244,73 +263,73 @@ indicatorBar {
 
 
 
-
-<script type='text/javascript'>
-
-
-
-
-
-
-
-var outerWidth = 500,
-    outerHeight = 400,
-    margin = {top: 30, right: 30, bottom: 50, left: 50},
-    width = outerWidth - margin.left - margin.right,
-    height = outerHeight - margin.top - margin.bottom;
-
-
-
-
-
-var update = function(houseData, maxHouses){
-
-
-
-var svgHeight = 500;
-
-
-var housePoints = [[100,50], [100,150], [80,150], [150,200],
-                  [220,150], [200,150], [200,50], [100,50]];
-
-console.log('number of houses => ' + houseData.length);
-
-var transitionTime = 30;
-
-var houseScaleX = d3.scale.linear().domain([1,maxHouses]).range([0,500]);  //---//
-//d3.select('#svg').selectAll('polygon').remove();
-
-var house = d3.select('#svg').selectAll('polygon')
-                            .data(houseData, function(d,i) { return d; });
-                            
-                        house
-                            .enter()
-                            .append("polygon")
-                            .attr("points", housePoints.map(function(d) { 
-                                    var x = d[0],
-                                    y = svgHeight - d[1] + 100;
-                                    return [x,y]; }))                                  
-                            .attr("stroke", "black")
-                            .attr("stroke-width", 1)
-                            .attr("fill", "#00b5e2")
-                            .attr("transform", function(d,i) { return "translate(" + (houseScaleX(d)) + ")"; })
-                            .attr('n', function(d,i) { return i; })
-                            .style('fill', 'Bisque');                               
-                             
-                            
-                        house.exit()
-                            .transition().duration(transitionTime * 5)
-                            .style('fill', 'orange')
-                            .style('fill-opacity', 0)
-                            .style('stroke-opacity', 0)
-                            .remove();
-
-   }
-
-
-
-</script>
-
+<!--  -->
+<!-- <script type='text/javascript'> -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!-- var outerWidth = 500, -->
+<!--     outerHeight = 400, -->
+<!--     margin = {top: 30, right: 30, bottom: 50, left: 50}, -->
+<!--     width = outerWidth &#45; margin.left &#45; margin.right, -->
+<!--     height = outerHeight &#45; margin.top &#45; margin.bottom; -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!-- var update = function(houseData, maxHouses){ -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!-- var svgHeight = 500; -->
+<!--  -->
+<!--  -->
+<!-- var housePoints = [[100,50], [100,150], [80,150], [150,200], -->
+<!--                   [220,150], [200,150], [200,50], [100,50]]; -->
+<!--  -->
+<!-- console.log('number of houses => ' + houseData.length); -->
+<!--  -->
+<!-- var transitionTime = 30; -->
+<!--  -->
+<!-- var houseScaleX = d3.scale.linear().domain([1,maxHouses]).range([0,500]);  //&#45;&#45;&#45;// -->
+<!-- //d3.select('#svg').selectAll('polygon').remove(); -->
+<!--  -->
+<!-- var house = d3.select('#svg').selectAll('polygon') -->
+<!--                             .data(houseData, function(d,i) { return d; }); -->
+<!--                              -->
+<!--                         house -->
+<!--                             .enter() -->
+<!--                             .append("polygon") -->
+<!--                             .attr("points", housePoints.map(function(d) {  -->
+<!--                                     var x = d[0], -->
+<!--                                     y = svgHeight &#45; d[1] + 100; -->
+<!--                                     return [x,y]; }))                                   -->
+<!--                             .attr("stroke", "black") -->
+<!--                             .attr("stroke&#45;width", 1) -->
+<!--                             .attr("fill", "#00b5e2") -->
+<!--                             .attr("transform", function(d,i) { return "translate(" + (houseScaleX(d)) + ")"; }) -->
+<!--                             .attr('n', function(d,i) { return i; }) -->
+<!--                             .style('fill', 'Bisque');                                -->
+<!--                               -->
+<!--                              -->
+<!--                         house.exit() -->
+<!--                             .transition().duration(transitionTime * 5) -->
+<!--                             .style('fill', 'orange') -->
+<!--                             .style('fill&#45;opacity', 0) -->
+<!--                             .style('stroke&#45;opacity', 0) -->
+<!--                             .remove(); -->
+<!--  -->
+<!--    } -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!-- </script> -->
+<!--  -->
    </head>
 
   <body>
@@ -379,8 +398,8 @@ var house = d3.select('#svg').selectAll('polygon')
       <p>
       Andelen i yrkesaktiv ålder är ett trubbigt mått, på så sätt att alla som kan lönearbeta också antas göra det. 
       När vi justerar för sysselsättningsgrad blir den uppskattade försörjningsbördan betydligt högre. För närvarande är  
-      <span data-var='cer'>%</span> av alla malmöbor sysselsatta (2013). Om vi antar att sysselsättningsgraden bland de nya invånarna förändras med <span data-var='employmentRateChange' class='TKAdjustableNumber' data-min='-15' data-max='15'>%</span>  
-      (=<span data-var='ner'>%</span>) kommer den justerade försörjningsbördan att vara  
+      <span data-var='cer'>%</span> av alla malmöbor sysselsatta (2013). Om vi antar att sysselsättningsgraden bland de nya invånarna förändras med <span data-var='employmentRateChange' class='TKAdjustableNumber ind1' data-min='-15' data-max='15'>%</span>  
+      (=<span data-var='ner' id='meh'>%</span>) kommer den justerade försörjningsbördan att vara  
       <span data-var='fadr' data-format='%.2f'></span>, att jämföra med dagens <span data-var='cadr' data-format='%.2f'></span>.
       </p>
 
@@ -466,7 +485,7 @@ var house = d3.select('#svg').selectAll('polygon')
                            <th class='colName'>Befolkningstillväxt</td>
                            <th class='colName'>Hushållskvot</td>
                            <th class='colName'>Hushåll/person (=1/kvot)</td>
-                           <th class='colName'>Bostadsbehov <span data-var='start'></span>-<span data-var='end'></span></td>
+                           <th class='colName'>Hushåll <span data-var='start'></span>-<span data-var='end'></span></td>
                            </th>
                         <tr>
                            <td class='rowName'>15-19</td>
@@ -730,6 +749,20 @@ var house = d3.select('#svg').selectAll('polygon')
     </div>
     <!-- /Regional -->
 
+    <!-- Homelessness -->
+    <div id="homelessnessWidget" class="widget">
+      Hemlöshet
+      <p>Hemlöshet...</p>
+    </div>
+    <!-- /Homelessness -->
+
+    <!-- Welfare -->
+    <div id="welfareWidget" class="widget">
+      Försörjningsstöd
+      <p>Försörjningsstöd...</p>
+    </div>
+    <!-- /Welfare -->
+
 
 
 </div>
@@ -738,7 +771,7 @@ var house = d3.select('#svg').selectAll('polygon')
    <div id='controls'>
    
          <h1 style="display:inline; margin-left:50px; font-family: MyriadPro-Bold, Garamond, Arial, Helvetica, sans-serif">Nya malmöbor 2015-2040</h1>
-        <p id="">
+        <p id="summary">
 
                 <span id='fromStart' class='TKIf' data-var='fromStart'>Fram till </span> 
                 <span id='notFromStart' class='TKIf' data-var='notFromStart'>
@@ -767,19 +800,21 @@ var house = d3.select('#svg').selectAll('polygon')
                 <span id="business" class="selectorItem hide"> Näringsliv </span>
                 <span id="infrastructure" class="selectorItem hide"> Infrastruktur </span>
                 <span id="regional" class="selectorItem hide"> Regionen </span>
+                <span id="homelessness" class="selectorItem hide"> Hemlöshet </span>
+                <span id="welfare" class="selectorItem hide"> Försörjningsstöd </span>
          </p>
          
-         <p id="ages" data-var="ageVisible" class="selector TKSwitchActive" data-class1="show" data-class2="hide">
-                <span id="totalt" class="selectorItem hide"> totalt </span>
-                || 
-                <span id="totalt" class="selectorItem hide"> 0 </span>
-                <span id="totalt" class="selectorItem hide"> 1-5 </span>
-                <span id="totalt" class="selectorItem hide"> 6-15 </span>
-                <span id="totalt" class="selectorItem hide"> 16-19 </span>
-                <span id="totalt" class="selectorItem hide"> 20-64 </span>
-                <span id="totalt" class="selectorItem hide"> 65-79 </span>
-                <span id="totalt" class="selectorItem hide"> 80+ </span>
-         </p>
+         <!-- <p id="ages" data&#45;var="ageVisible" class="selector TKSwitchActive" data&#45;class1="show" data&#45;class2="hide"> -->
+         <!--        <span id="totalt" class="selectorItem hide"> totalt </span> -->
+         <!--        ||  -->
+         <!--        <span id="totalt" class="selectorItem hide"> 0 </span> -->
+         <!--        <span id="totalt" class="selectorItem hide"> 1&#45;5 </span> -->
+         <!--        <span id="totalt" class="selectorItem hide"> 6&#45;15 </span> -->
+         <!--        <span id="totalt" class="selectorItem hide"> 16&#45;19 </span> -->
+         <!--        <span id="totalt" class="selectorItem hide"> 20&#45;64 </span> -->
+         <!--        <span id="totalt" class="selectorItem hide"> 65&#45;79 </span> -->
+         <!--        <span id="totalt" class="selectorItem hide"> 80+ </span> -->
+         <!-- </p> -->
 
                     <svg id="yearChart">
                        <g id="gBrush" data-var="xExtent" class="TKBrush brush" data-min="2015" data-max="2040" data-x1="2015" data-x2="2019"></g>
@@ -854,6 +889,107 @@ var primaryschoolTangle = new Tangle(document.getElementById('primaryschoolWidge
 });
 
 
+// var uppersecondaryTangle = new Tangle(document.getElementById('uppersecondaryWidget'), {
+//     initialize: function () { console.log('UPPER SECONDARY INITIALIZED...');
+//         
+//                               this.start = 2015; 
+//                               this.end = 2040;
+//                               this.nChildren = 0;
+//                               this.childrenPerSchool = 500;
+//                               this.round = roundn(5);
+//                             },
+//     update:     function () { this.perCapita = 1/this.childrenPerSchool;
+//                               this.nSchools = Math.ceil(this.nChildren * this.perCapita);
+//  }
+// });
+
+ 
+
+var housingTangle = new Tangle(document.getElementById('housingWidget'), {
+    initialize: function () { this.start = 2015;
+                              this.end = 2040;
+                              this.nYears = this.end - this.start + 1;
+                              this.nPeople = 0;
+                              this.appartments = 0;
+                              this.peoplePerAppartment = 3;
+                              this.appartmentsPerYear = 0;
+                              this.appartmentsPerYearChange = 0;
+                              this.plus = true;
+                              this.appartmentsPerHouse = 1000;
+                              this.maxHouses = 150;                 
+                              this.round = roundn(5);
+
+                              this.demolitionPerYear = 50;
+                              this.currentProduction = 1300;
+                              this.totalHousing = 154900;
+                              this.housingResidual = this.totalHousing * 0.01;
+                              this.availableHousing = 150;
+
+                              this.n15_19 = this.n20_24 = this.n25_34 = this.n35_44 = 
+                              this.n45_54 = this.n55_64 = this.n65_69 = this.n70_74 = 
+                              this.n75_79 = this.n80_100 = 0;
+
+
+                  this.hhr15_19 = .02;  
+                  this.hhr20_24 = .45;
+                  this.hhr25_34 = .59;  
+                  this.hhr35_44 = .61;
+                  this.hhr45_54 = .68  
+                  this.hhr55_64 = .63;
+                  this.hhr65_69 = .61;  
+                  this.hhr70_74 = .66;
+                  this.hhr75_79 = .66;  
+                  this.hhr80_100 = .82;  
+
+                  this.hh15_19 = 1/.02;  
+                  this.hh20_24 = 1/.45;
+                  this.hh25_34 = 1/.59;  
+                  this.hh35_44 = 1/.61;
+                  this.hh45_54 = 1/.68  
+                  this.hh55_64 = 1/.63;
+                  this.hh65_69 = 1/.61;  
+                  this.hh70_74 = 1/.66;
+                  this.hh75_79 = 1/.66;  
+                  this.hh80_100 = 1/.82;  
+
+
+                            },
+    update:     function () { this.nYears = this.end - this.start + 1;
+
+                              // this.perCapita = 1/this.peoplePerAppartment;
+                              // this.appartments = Math.ceil(this.nPeople * this.perCapita);
+                              // this.appartmentsPerYear = this.round(this.appartments/this.nYears);
+                              // this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;  
+                              //    // currently producing 1300 new appartments/year
+                              // this.plus = this.appartmentsPerYearChange >= 0;
+                              // document.getElementById('appartmentsPerYearChange').style.color = this.appartmentsPerYearChange >= 0 ? 'red' : 'green'; 
+
+
+                  this.nhh15_19 = Math.round(this.n15_19 * this.hhr15_19);  
+                  this.nhh20_24 = Math.round(this.n20_24 * this.hhr20_24);
+                  this.nhh25_34 = Math.round(this.n25_34 * this.hhr25_34);  
+                  this.nhh35_44 = Math.round(this.n35_44 * this.hhr35_44);
+                  this.nhh45_54 = Math.round(this.n45_54 * this.hhr45_54);  
+                  this.nhh55_64 = Math.round(this.n55_64 * this.hhr55_64);
+                  this.nhh65_69 = Math.round(this.n65_69 * this.hhr65_69);  
+                  this.nhh70_74 = Math.round(this.n70_74 * this.hhr70_74);
+                  this.nhh75_79 = Math.round(this.n75_79 * this.hhr75_79);  
+                  this.nhh80_100 = Math.round(this.n80_100 * this.hhr80_100);
+
+                  this.nhh = this.nhh15_19 + this.nhh20_24 + this.nhh25_34 + this.nhh35_44 +
+                            this.nhh45_54 + this.nhh55_64 + this.nhh65_69 + this.nhh70_74 +
+                            this.nhh75_79 + this.nhh80_100;
+
+                  this.demolition = this.demolitionPerYear * this.nYears; 
+                  this.housingNeed = this.nhh + this.demolition - this.availableHousing + this.housingResidual; 
+                  this.housingNeedPerYear = this.housingNeed / this.nYears;
+                  this.productionChange = this.housingNeedPerYear - this.currentProduction;
+
+ }
+});
+
+
+
 var careTangle = new Tangle(document.getElementById('careWidget'), {
     initialize: function () { console.log('CARE INITIALIZED...');
         
@@ -866,6 +1002,10 @@ var careTangle = new Tangle(document.getElementById('careWidget'), {
                               console.log('CARE UPDATED...');
  }
 });
+
+
+
+
 
 var productivityTangle = new Tangle(document.getElementById('productivityWidget'), {
     initialize: function () { console.log('PRODUCTIVITY INITIALIZED...');
@@ -928,90 +1068,71 @@ var productivityTangle = new Tangle(document.getElementById('productivityWidget'
 
 
 
-var housingTangle = new Tangle(document.getElementById('housingWidget'), {
-    initialize: function () { this.start = 2015;
-                              this.end = 2040;
-                              this.nYears = this.end - this.start + 1;
-                              this.nPeople = 0;
-                              this.appartments = 0;
-                              this.peoplePerAppartment = 3;
-                              this.appartmentsPerYear = 0;
-                              this.appartmentsPerYearChange = 0;
-                              this.plus = true;
-                              this.appartmentsPerHouse = 1000;
-                              this.maxHouses = 150;                 
-                              this.round = roundn(5);
-
-                              this.demolitionPerYear = 50;
-                              this.currentProduction = 1300;
-                              this.totalHousing = 154900;
-                              this.housingResidual = this.totalHousing * 0.01;
-                              this.availableHousing = 150;
-
-                              this.n15_19 = this.n20_24 = this.n25_34 = this.n35_44 = 
-                              this.n45_54 = this.n55_64 = this.n65_69 = this.n70_74 = 
-                              this.n75_79 = this.n80_100 = 0;
+// var businessTangle = new Tangle(document.getElementById('businessWidget'), {
+//     initialize: function () { console.log('BUSINESS INITIALIZED...');
+//         
+//                               this.start = 2015; 
+//                               this.end = 2040;
+//                               this.meh = 0;
+//                             },
+//     update:     function () {  
+// 
+//  }
+// });
 
 
-                  this.hhr15_19 = .02;  
-                  this.hhr20_24 = .45;
-                  this.hhr25_34 = .59;  
-                  this.hhr35_44 = .61;
-                  this.hhr45_54 = .68  
-                  this.hhr55_64 = .63;
-                  this.hhr65_69 = .61;  
-                  this.hhr70_74 = .66;
-                  this.hhr75_79 = .66;  
-                  this.hhr80_100 = .82;  
+// var infrastructureTangle = new Tangle(document.getElementById('infrastructureWidget'), {
+//     initialize: function () { console.log('INFRASTRUCTURE INITIALIZED...');
+//         
+//                               this.start = 2015; 
+//                               this.end = 2040;
+//                               this.meh = 0;
+//                             },
+//     update:     function () {  
+// 
+//  }
+// });
 
-                  this.hh15_19 = 1/.02;  
-                  this.hh20_24 = 1/.45;
-                  this.hh25_34 = 1/.59;  
-                  this.hh35_44 = 1/.61;
-                  this.hh45_54 = 1/.68  
-                  this.hh55_64 = 1/.63;
-                  this.hh65_69 = 1/.61;  
-                  this.hh70_74 = 1/.66;
-                  this.hh75_79 = 1/.66;  
-                  this.hh80_100 = 1/.82;  
-                            },
-    update:     function () { this.nYears = this.end - this.start + 1;
+ 
+// var regionalTangle = new Tangle(document.getElementById('regionalWidget'), {
+//     initialize: function () { console.log('REGIONAL CHAPTER INITIALIZED...');
+//         
+//                               this.start = 2015; 
+//                               this.end = 2040;
+//                               this.meh = 0;
+//                             },
+//     update:     function () {  
+// 
+//  }
+// });
 
-                              // this.perCapita = 1/this.peoplePerAppartment;
-                              // this.appartments = Math.ceil(this.nPeople * this.perCapita);
-                              // this.appartmentsPerYear = this.round(this.appartments/this.nYears);
-                              // this.appartmentsPerYearChange = this.appartmentsPerYear - 1300;  
-                              //    // currently producing 1300 new appartments/year
-                              // this.plus = this.appartmentsPerYearChange >= 0;
-                              // document.getElementById('appartmentsPerYearChange').style.color = this.appartmentsPerYearChange >= 0 ? 'red' : 'green'; 
-
-
-                  this.nhh15_19 = Math.round(this.n15_19 * this.hhr15_19);  
-                  this.nhh20_24 = Math.round(this.n20_24 * this.hhr20_24);
-                  this.nhh25_34 = Math.round(this.n25_34 * this.hhr25_34);  
-                  this.nhh35_44 = Math.round(this.n35_44 * this.hhr35_44);
-                  this.nhh45_54 = Math.round(this.n45_54 * this.hhr45_54);  
-                  this.nhh55_64 = Math.round(this.n55_64 * this.hhr55_64);
-                  this.nhh65_69 = Math.round(this.n65_69 * this.hhr65_69);  
-                  this.nhh70_74 = Math.round(this.n70_74 * this.hhr70_74);
-                  this.nhh75_79 = Math.round(this.n75_79 * this.hhr75_79);  
-                  this.nhh80_100 = Math.round(this.n80_100 * this.hhr80_100);
-
-                  this.nhh = this.nhh15_19 + this.nhh20_24 + this.nhh25_34 + this.nhh35_44 +
-                            this.nhh45_54 + this.nhh55_64 + this.nhh65_69 + this.nhh70_74 +
-                            this.nhh75_79 + this.nhh80_100;
-
-                  this.demolition = this.demolitionPerYear * this.nYears; 
-                  this.housingNeed = this.nhh + this.demolition - this.availableHousing + this.housingResidual; 
-                  this.housingNeedPerYear = this.housingNeed / this.nYears;
-                  this.productionChange = this.housingNeedPerYear - this.currentProduction;
-
- }
-});
+// var homelessnessTangle = new Tangle(document.getElementById('homelessnessWidget'), {
+//     initialize: function () { console.log('HOMELESSNESS INITIALIZED...');
+//         
+//                               this.start = 2015; 
+//                               this.end = 2040;
+//                               this.meh = 0;
+//                             },
+//     update:     function () {  
+// 
+//  }
+// });
 
 
+// var welfareTangle = new Tangle(document.getElementById('welfareWidget'), {
+//     initialize: function () { console.log('WELFARE INITIALIZED...');
+//         
+//                               this.start = 2015; 
+//                               this.end = 2040;
+//                               this.meh = 0;
+//                             },
+//     update:     function () {  
+// 
+//  }
+// });
 
 
+ 
 
                 d3.json("data/data.json", function(error, json) {
                     if (error) return console.warn(error);
@@ -1086,12 +1207,12 @@ var dynamicSettings = {
 this.yearChart = horizontalBarChart('#yearChart', staticSettings, dynamicSettings);
 this.yearChart.render();
 
-this.sectionVisible = 0;
+this.sectionVisible = 4;
 
 
 this.widgets = ["demographyWidget", "preschoolWidget", "primaryschoolWidget",  
                 "uppersecondaryWidget", "housingWidget", "careWidget", "productivityWidget",  
-                "businessWidget", "infrastructureWidget", "regionalWidget"];
+                "businessWidget", "infrastructureWidget", "regionalWidget", "homelessnessWidget", "welfareWidget"];
 
 document.getElementById('widgetContainer').appendChild(document.getElementById(this.widgets[this.sectionVisible]));
 
@@ -1124,11 +1245,14 @@ this.ageChart.render();
 
 //-----//
 
-this.sectionVisible = 4;
+// this.sectionVisible = 4;
 // this.ageVisible = 0;
+this.previousSectionVisible = this.sectionVisible;
 
 //-----//
 
+      document.getElementById('widgetContainer').appendChild(document.getElementById(this.widgets[this.sectionVisible]));
+      window.scrollTo(0,0);
                  
                  
             },
@@ -1170,14 +1294,19 @@ update: function() {
 
                   this.increase = this.change >= 0;
                   this.decrease = !this.increase;
-                  
+                 
 //-----//
 
    for (var i = 0, len = this.widgets.length; i < len; i++) {
             document.getElementById('inactive').appendChild(document.getElementById(this.widgets[i]));
    }
 
-   document.getElementById('widgetContainer').appendChild(document.getElementById(this.widgets[this.sectionVisible]));
+      document.getElementById('widgetContainer').appendChild(document.getElementById(this.widgets[this.sectionVisible]));
+
+   if(this.previousSectionVisible != this.sectionVisible){ 
+      window.scrollTo(0,0); // reset scroll position but only when changing the chapters
+      this.previousSectionVisible = this.sectionVisible; 
+   }
 
 //-----//
 
