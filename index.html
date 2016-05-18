@@ -258,78 +258,6 @@ indicatorBar {
 </style>
 
 
-
-
-
-
-
-<!--  -->
-<!-- <script type='text/javascript'> -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- var outerWidth = 500, -->
-<!--     outerHeight = 400, -->
-<!--     margin = {top: 30, right: 30, bottom: 50, left: 50}, -->
-<!--     width = outerWidth &#45; margin.left &#45; margin.right, -->
-<!--     height = outerHeight &#45; margin.top &#45; margin.bottom; -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- var update = function(houseData, maxHouses){ -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- var svgHeight = 500; -->
-<!--  -->
-<!--  -->
-<!-- var housePoints = [[100,50], [100,150], [80,150], [150,200], -->
-<!--                   [220,150], [200,150], [200,50], [100,50]]; -->
-<!--  -->
-<!-- console.log('number of houses => ' + houseData.length); -->
-<!--  -->
-<!-- var transitionTime = 30; -->
-<!--  -->
-<!-- var houseScaleX = d3.scale.linear().domain([1,maxHouses]).range([0,500]);  //&#45;&#45;&#45;// -->
-<!-- //d3.select('#svg').selectAll('polygon').remove(); -->
-<!--  -->
-<!-- var house = d3.select('#svg').selectAll('polygon') -->
-<!--                             .data(houseData, function(d,i) { return d; }); -->
-<!--                              -->
-<!--                         house -->
-<!--                             .enter() -->
-<!--                             .append("polygon") -->
-<!--                             .attr("points", housePoints.map(function(d) {  -->
-<!--                                     var x = d[0], -->
-<!--                                     y = svgHeight &#45; d[1] + 100; -->
-<!--                                     return [x,y]; }))                                   -->
-<!--                             .attr("stroke", "black") -->
-<!--                             .attr("stroke&#45;width", 1) -->
-<!--                             .attr("fill", "#00b5e2") -->
-<!--                             .attr("transform", function(d,i) { return "translate(" + (houseScaleX(d)) + ")"; }) -->
-<!--                             .attr('n', function(d,i) { return i; }) -->
-<!--                             .style('fill', 'Bisque');                                -->
-<!--                               -->
-<!--                              -->
-<!--                         house.exit() -->
-<!--                             .transition().duration(transitionTime * 5) -->
-<!--                             .style('fill', 'orange') -->
-<!--                             .style('fill&#45;opacity', 0) -->
-<!--                             .style('stroke&#45;opacity', 0) -->
-<!--                             .remove(); -->
-<!--  -->
-<!--    } -->
-<!--  -->
-<!--  -->
-<!--  -->
-<!-- </script> -->
-<!--  -->
    </head>
 
   <body>
@@ -654,9 +582,38 @@ indicatorBar {
 
     <!-- Primary school -->
     <div id="primaryschoolWidget" class="widget">
-         <span data-var="nPrimaryschoolChildren"></span> nya 6-15åringar skapar ett behov av 
-         <span data-var='nPrimaryschools'> nya grundskolor om varje enhet rymmer </span>
-         <span data-var='childrenPerPrimaryschool' class="TKAdjustableNumber" data-min="300" data-max="1000" data-step="100"> barn.</span>
+
+       Mellan <span data-var='start'></span> och <span data-var='end'></span> förväntas 
+         <span data-var="n6_15"></span> fler barn i grundskoleåldrarna i Malmö. 
+         Av dessa tillhör <span data-var='n6_12'></span> f-6, det vill säga 6-12 år,  
+         varav <span data-var='n6_9'></span> är i åldrarna 6-9 år och <span data-var='n10_12'></span> är 10-12 år. 
+         Därutöver tillkommer <span data-var='n13_15'></span> nya 13-15-åringar. 
+
+        Grundskoleförvaltningen räknar med cirka 525 och 675 elever per skola vid nybyggnation av skolor för f-6 respektive högstadiet.  
+        <br><br> Befolkningstillväxten motsvarar då: <br> 
+        <span data-var='n6_12'></span> fler barn 6-12 år &times;  
+        <span data-var='childrenPerSchool6_12' class="TKAdjustableNumber" data-min="375" data-max="700" data-step="25"> elever per skola </span>
+        = <span data-var='nPrimaryschools6_12'></span> f-6-skolor <br>
+        <span data-var='n13_15'></span> fler barn 13-15 år &times;  
+        <span data-var='childrenPerSchool13_15' class="TKAdjustableNumber" data-min="400" data-max="950" data-step="25"> elever per skola </span>
+        = <span data-var='nPrimaryschools13_15'></span> högstadieskolor <br>
+        = totalt <span data-var='nPrimaryschools'></span> nya grundskolor. <br>
+        <br>
+        Nuvarande antal elever per lärare är 12,3. 
+        <br>
+        <span data-var='n6_15'></span> fler barn i åldrarna 6-15 år &times;  
+        <span data-var='nPrimaryschoolChildrenPerTeacher' class="TKAdjustableNumber" data-min="10" data-max="15" data-step="0.1" data-format="%.1f"> elever per lärare </span>
+        skapar ett behov av <span data-var='nPrimaryschoolTeachers'></span> lärare. <br>
+        <br>
+        Givet en klasstorlek på  
+        <span data-var='nChildrenPerClass6_12' class="TKAdjustableNumber" data-min="10" data-max="40" data-step="1"> elever per lärare </span>
+        för f-6 och
+        <span data-var='nChildrenPerClass13_15' class="TKAdjustableNumber" data-min="10" data-max="40" data-step="1"> elever per lärare </span>
+        på högstadiet motsvarar ökningen i grundskoleåldrarna: <br>  
+        <span data-var='nClasses6_12'> fler f-6-klasser</span> och <br> 
+        <span data-var='nClasses13_15'> fler högstadieklasser</span> <br>
+        = totalt <span data-var='nClasses6_15'></span> grundskoleklasser.
+
     </div>
     <!-- /Primary school -->
 
@@ -879,12 +836,24 @@ var primaryschoolTangle = new Tangle(document.getElementById('primaryschoolWidge
         
                               this.start = 2015; 
                               this.end = 2040;
-                              this.nPrimaryschoolChildren = 0;
-                              this.childrenPerPrimaryschool = 500;
+                              this.childrenPerSchool6_12 = 525;
+                              this.childrenPerSchool13_15 = 675;
                               this.round = roundn(5);
+                              this.n6_9 = this.n10_12 = this.n13_15 = this.n6_12 = this.n6_15 = 0;
+                              this.nPrimaryschoolChildrenPerTeacher = 12.3;
+                              this.nPrimaryschoolTeachers = 0;
+                              this.nChildrenPerClass6_12 = 25; 
+                              this.nChildrenPerClass13_15 = 30;
                             },
-    update:     function () { this.perCapita = 1/this.childrenPerPrimaryschool;
-                              this.nPrimaryschools = Math.ceil(this.nPrimaryschoolChildren * this.perCapita);
+    update:     function () {  
+                              this.n6_12 = this.n6_9 + this.n10_12;
+                              this.nPrimaryschools6_12 = Math.ceil(this.n6_12 / this.childrenPerSchool6_12);
+                              this.nPrimaryschools13_15 = Math.ceil(this.n13_15 / this.childrenPerSchool13_15);
+                              this.nPrimaryschools = this.nPrimaryschools6_12 + this.nPrimaryschools13_15;
+                              this.nPrimaryschoolTeachers = Math.ceil(this.n6_15 / this.nPrimaryschoolChildrenPerTeacher); 
+                              this.nClasses6_12 = Math.ceil(this.n6_12 / this.nChildrenPerClass6_12);
+                              this.nClasses13_15 = Math.ceil(this.n13_15 / this.nChildrenPerClass13_15);
+                              this.nClasses6_15 = this.nClasses6_12 + this.nClasses13_15;
  }
 });
 
@@ -1207,7 +1176,7 @@ var dynamicSettings = {
 this.yearChart = horizontalBarChart('#yearChart', staticSettings, dynamicSettings);
 this.yearChart.render();
 
-this.sectionVisible = 4;
+this.sectionVisible = 0;
 
 
 this.widgets = ["demographyWidget", "preschoolWidget", "primaryschoolWidget",  
@@ -1373,8 +1342,16 @@ preschoolTangle.setValues({ start: this.start, end: this.end,
 
 // PRIMARY SCHOOL
 if(this.sectionVisible === 2) {
+
+                  this.n6_9 = sumInterval(allAges, 6, 9);
+                  this.n10_12 = sumInterval(allAges, 10, 12);
+                  this.n13_15 = sumInterval(allAges, 13, 15);
+
+
 primaryschoolTangle.setValues({ start: this.start, end: this.end, 
-                                nPrimaryschoolChildren: this.n6_15
+                                n6_15: this.n6_15,
+                                n6_9: this.n6_9, n10_12: this.n10_12, 
+                                n13_15: this.n13_15
    });
 }
 
